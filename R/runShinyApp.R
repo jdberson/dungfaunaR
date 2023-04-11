@@ -5,7 +5,7 @@
 #' viewed locally in the browser. After calling this function,
 #' If the app window doesn't start automatically,
 #' navigate to the port printed to your console
-#' (usually [localhost:8888](localhost:8888)) in your web browser.
+#' (usually [localhost:5197](localhost:5197)) in your web browser.
 #'
 #' @export
 #'

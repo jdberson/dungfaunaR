@@ -23,7 +23,7 @@ To view an interactive visualisation of the data, run
 runShinyApp()
 ```
 If the app window doesn't start automatically, navigate to the port printed to
-your console (usually [localhost:8888](localhost:8888)) in your web browser.
+your console (usually [localhost:5197](localhost:5197)) in your web browser.
 
 
 There will be some further refinements to these data but I think we are
@@ -31,14 +31,14 @@ at a stage to include a dashboard in the package.
 
 So, the aim is to:
 
-- 1.  incorporate a copy of the dashboard into the package so that when
-      a user installs the package they can run the dashboard locally.
-
-- 2.  update the dashboard so that it includes
-
-- all species found in the scientificName column (there are now new
-  species from the QLD and WA projects that will need to be added to the
-  ‘Select a species’ menu)
+# - 1.  incorporate a copy of the dashboard into the package so that when
+#       a user installs the package they can run the dashboard locally.
+# 
+# - 2.  update the dashboard so that it includes
+# 
+# - all species found in the scientificName column (there are now new
+#   species from the QLD and WA projects that will need to be added to the
+#   ‘Select a species’ menu)
 
 - A new menu item allowing for data to be filtered by datasetName
   (i.e. project)
