@@ -40,12 +40,12 @@ So, the aim is to:
 #   species from the QLD and WA projects that will need to be added to the
 #   ‘Select a species’ menu)
 
-- A new menu item allowing for data to be filtered by datasetName
-  (i.e. project)
+# - A new menu item allowing for data to be filtered by datasetName
+#   (i.e. project)
 
-- Remove the prediction tab
+# - Remove the prediction tab
 
-- Put back in the data tab
+# - Put back in the data tab
 
 - Turn off the jittering of points
 

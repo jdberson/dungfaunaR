@@ -37,7 +37,7 @@ alldatas <- table %>%
   tidyr::pivot_wider(names_from=species, values_from = c(abundance, biomass), values_fill=0)
 
 
-include_predictions <- TRUE
+include_predictions <- FALSE
 include_data_table <- TRUE
 
 
