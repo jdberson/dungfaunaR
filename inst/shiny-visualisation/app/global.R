@@ -1,6 +1,5 @@
 library(dplyr)
 library(sf)
-#library(terra)
 library(lubridate)
 library(stars)
 
@@ -38,7 +37,7 @@ alldatas <- table %>%
 
 
 include_predictions <- TRUE
-include_data_table <- FALSE
+include_data_table <- TRUE
 
 
 alldatas$abundance_total <- rowSums(alldatas[ , grepl( "abundance" , names( alldatas ) ) ])
