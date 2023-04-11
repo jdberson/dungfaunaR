@@ -102,6 +102,18 @@ function(input, output, session) {
     )
   }
 
+  filter_by_data_source <- function(d) {
+    validate(need(input$datasetName, 'Plots need a data source selected'))
+
+    print(input$datasetName)
+
+    if (input$datasetName == 'All')
+      return(d)
+
+
+    return(d %>% subset(datasetName == input$datasetName))
+  }
+
   rounded_map_bounds <- function() {
     # useful for caching purposes where slightly different views of the same
     # area will not need to have a new ggplot made
@@ -124,7 +136,9 @@ function(input, output, session) {
     lngRng <- range(bounds$east, bounds$west)
 
     return (
-      filter_by_daterange(datadata) %>%
+      datadata %>%
+        filter_by_daterange() %>%
+        filter_by_data_source() %>%
         subset(
           latitude >= latRng[1] & latitude <= latRng[2] &
             longitude >= lngRng[1] & longitude <= lngRng[2])
@@ -156,6 +170,7 @@ function(input, output, session) {
   })
   dataSummarised <- reactive({
     filter_by_daterange(datadata) %>%
+      filter_by_data_source() %>%
       group_by(
         state,
         site
@@ -390,7 +405,7 @@ function(input, output, session) {
         #   )
         # }
       # )
-  }) %>% bindEvent(input$nav, input$monthrange, input$color, input$species, input$daterange)
+  }) %>% bindEvent(input$nav, input$monthrange, input$color, input$species, input$daterange, input$datasetName)
 
   # Show a popup at the given location
   showdatacodePopup <- function(datacode, lat, lng, measure='abundance') {

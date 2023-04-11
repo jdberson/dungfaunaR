@@ -8,7 +8,6 @@ vars_preds <- c("Biomass" = "biomass")
 vars <- c("Average number of beetles trapped" = "abundance",
           "Average biomass of beetles trapped (g dry mass)" = "biomass")
 
-
 species_images <- vector()
 for (i in 1:length(species_choices)) {
   if (species_choices[i] == 'total') {
@@ -125,6 +124,13 @@ data_menu_inputs <- function() {
       "Select a measure",
       vars,
       selected = 'Average number of beetles trapped',
+      width = '100%'
+    ),
+    selectInput(
+      "datasetName",
+      "Select a data source",
+      dataset_sources,
+      selected = 'All',
       width = '100%'
     ),
     # selectInput("species", "Select a species", species_choices, selected='total', width='100%'),

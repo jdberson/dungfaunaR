@@ -20,6 +20,7 @@ table <- table %>% select(
   species=scientificName,
   abundance=individualCount,
   biomass=individualBiomass,
+  datasetName=datasetName
 )
 table$date <- ymd(paste(table$year, table$month, table$day, sep='-'))
 table <- table %>% subset(select=-c(year, month, day))
@@ -67,9 +68,14 @@ cleantable <- alldatas %>%
     Abundance = abundance_total,
     Biomass = biomass_total,
     Lat = latitude,
-    Long = longitude
+    Long = longitude,
+    datasetName = datasetName
   )
 
+dataset_sources <- c(
+  'All',
+  unique(cleantable$datasetName)
+)
 
 # get predicted_data_sf
 # load("./data/predicted_data_sf.RData")
