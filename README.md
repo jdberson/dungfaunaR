@@ -5,17 +5,26 @@
 
 Once you have cloned the repository to your computer, open the project
 and run:
-
+```
 devtools::install()
-
+```
 This will install the package to your local library.
 
 The data to use for the dashboard is:
-
+```
 data(“dungfauna_aus”)
+```
 
 These data contain records from DBEE, QLD and a WA project. Not for
 public release just yet.
+
+To view an interactive visualisation of the data, run
+```
+runShinyApp()
+```
+If the app window doesn't start automatically, navigate to the port printed to
+your console (usually [localhost:8888](localhost:8888)) in your web browser.
+
 
 There will be some further refinements to these data but I think we are
 at a stage to include a dashboard in the package.
