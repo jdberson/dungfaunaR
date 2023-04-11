@@ -384,10 +384,6 @@ function(input, output, session) {
     outlines <- ifelse(is.na(d[,colorBy]), '#bdbdbd', 'black')
     opacity <- ifelse(is.na(d[,colorBy]), 0, 1)
 
-    # add random jitter to preserve anonymity
-    d$longitude <- jitter(d$longitude, amount=0.025)
-    d$latitude <- jitter(d$latitude, amount=0.025)
-
     leafletProxy("map", data = d) %>%
       clearMarkers() %>%
       addCircleMarkers(~longitude, ~latitude, radius=radius, layerId=~datacode,
@@ -571,22 +567,22 @@ function(input, output, session) {
   })
 
   # notification that points are randomly moved for privacy
-  shown_randomly_moved_notification <- reactiveValues(shown=FALSE)
-  observeEvent(input$map_zoom, {
-    if (shown_randomly_moved_notification$shown)
-      return()
+  # shown_randomly_moved_notification <- reactiveValues(shown=FALSE)
+  # observeEvent(input$map_zoom, {
+  #   if (shown_randomly_moved_notification$shown)
+  #     return()
 
-    if (input$map_zoom > 10) {
-      show_toast(
-        title = '',
-        text = "Note, data points are randomly moved to preserve privacy.",
-        position = 'top',
-        width='40%',
-        timer=5000
-      )
-      shown_randomly_moved_notification$shown = TRUE
-    }
-  })
+    # if (input$map_zoom > 10) {
+    #   show_toast(
+    #     title = '',
+    #     text = "Note, data points are randomly moved to preserve privacy.",
+    #     position = 'top',
+    #     width='40%',
+    #     timer=5000
+    #   )
+    #   shown_randomly_moved_notification$shown = TRUE
+    # }
+  # })
 
 
   ## Data Explorer ###########################################

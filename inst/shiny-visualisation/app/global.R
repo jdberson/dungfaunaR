@@ -44,8 +44,6 @@ include_data_table <- TRUE
 alldatas$abundance_total <- rowSums(alldatas[ , grepl( "abundance" , names( alldatas ) ) ])
 alldatas$biomass_total <- rowSums(alldatas[ , grepl( "biomass" , names( alldatas ) ) ])
 alldatas$date <- as.Date(alldatas$date, format="%d/%m/%Y")
-alldatas$latitude <- jitter(alldatas$latitude)
-alldatas$longitude <- jitter(alldatas$longitude)
 alldatas <- alldatas %>% mutate(
   datacode=row_number()
 )
