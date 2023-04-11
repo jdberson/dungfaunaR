@@ -1,14 +1,26 @@
 Package: dungfaunaR
-Title: What the Package Does (One Line, Title Case)
+Title: Collation of Dung Fauna Trapping and Observation Records
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
+    c(person(given = "Jacob", 
+             family =  "Berson",
+             role = c("aut", "cre"),
+             email = "jacob.berson@uwa.edu.au",
+             comment = c(ORCID = "0000-0002-7059-2131")),
+      person(given = "Jake",
+             family = "Manger",
+             role = "aut",
+             email = "jake.manger@uwa.edu.au",
+             comment = c(ORCID = "0000-0002-0686-4788")))
 Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: CC BY 4.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.1
 URL: https://github.com/jdberson/dungfaunaR
 BugReports: https://github.com/jdberson/dungfaunaR/issues
+Suggests: 
+    covr
+Depends: 
+    R (>= 2.10)
+LazyData: true
