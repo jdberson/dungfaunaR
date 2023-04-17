@@ -3,6 +3,8 @@ library(sf)
 library(lubridate)
 library(stars)
 
+#devtools::load_all()
+
 # load the data table and format it for the dashboard
 data('dungfauna_aus')
 table <- dungfauna_aus
@@ -10,8 +12,8 @@ table <- dungfauna_aus
 table <- table %>% select(
   id = eventID,
   state=stateProvince,
-  site=parentLocationID,
-  trap=locationID,
+  site=locationID_site,
+  trap=locationID_trap,
   latitude=decimalLatitude,
   longitude=decimalLongitude,
   year=year,
@@ -19,19 +21,39 @@ table <- table %>% select(
   day=day,
   species=scientificName,
   abundance=individualCount,
-  biomass=individualBiomass,
-  datasetName=datasetName
-)
+  #biomass=individualBiomass,
+  datasetName=datasetName,
+  occurrenceStatus
+) |>
+  mutate(day = if_else(is.na(day), 1, day)) |>
+  mutate(trap = if_else(is.na(trap), site, trap)) |>
+
+  # Temporary hack to include a biomass variable - JB to fix
+  mutate(biomass = rnorm(length(datasetName), 100))
+
 table$date <- ymd(paste(table$year, table$month, table$day, sep='-'))
 table <- table %>% subset(select=-c(year, month, day))
 
-# remove duplicated data
-table <- table[!duplicated(table[!names(table) %in% c('abundance', 'biomass')]),]
+# remove duplicated data - should not be duplicates
+# table <- table[!duplicated(table[!names(table) %in% c('abundance', 'biomass')]),]
+# table <- table[!duplicated(table[!names(table) %in% c('abundance')]),]
 
 # Jake B FIX THE DATA!
-# remove nas
-table <- table %>% tidyr::drop_na(site, trap, abundance)
-table$biomass[is.na(table$biomass)] <- 0
+# remove nas - this removes survey data, reconsider how to include this
+# table <- table %>% tidyr::drop_na(site, trap, abundance)
+# table$biomass[is.na(table$biomass)] <- 0
+
+# There are data that come from surveys / museum records etc. These will have
+# an occurrenceStatus of "present" but a count of NA. Need to decide how to
+# incorporate these data. For now, assign these values 1.
+
+table <-
+  table |>
+  mutate(abundance = case_when(
+    is.na(abundance) & occurrenceStatus == "present" ~ 1,
+    is.na(abundance) & occurrenceStatus == "absent" ~ 0,
+    TRUE ~ abundance
+  ))
 
 alldatas <- table %>%
   tidyr::pivot_wider(names_from=species, values_from = c(abundance, biomass), values_fill=0)
