@@ -36,8 +36,18 @@ data('dungfauna_aus')
 
 To view an interactive visualisation of the data, run
 
-    runShinyApp()
+``` r
+runShinyApp()
+```
 
 If the app window doesn’t start automatically, navigate to the port
 printed to your console (usually [localhost:5197](localhost:5197)) in
 your web browser.
+
+## Install and run from source
+
+To install and run from source, clone this repository and, from R, run
+
+``` r
+devtools::load_all()
+```

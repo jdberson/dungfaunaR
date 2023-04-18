@@ -35,7 +35,7 @@ devtools::install_github("jdberson/dungfaunaR")
 
 To load the data in R, run
 
-```{r example}
+``` r
 library(dungfaunaR)
 data('dungfauna_aus')
 ```
@@ -43,7 +43,7 @@ data('dungfauna_aus')
 ## View data interactively
 
 To view an interactive visualisation of the data, run
-```{r}
+``` r
 runShinyApp()
 ```
 If the app window doesn't start automatically, navigate to the port printed to
@@ -53,6 +53,6 @@ your console (usually [localhost:5197](localhost:5197)) in your web browser.
 ## Install and run from source
 
 To install and run from source, clone this repository and, from R, run
-```{r}
+``` r
 devtools::load_all()
 ```

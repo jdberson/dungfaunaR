@@ -19,7 +19,8 @@ show_all(atlases)
 galah_config(email = "jacob.berson@uwa.edu.au", atlas = "Australia") # default
 
 species <-
-  c("Bubas bison",
+  c(
+    "Bubas bison",
     "Copris elphenor",
     "Copris hispanus",
     "Euoniticellus africanus",
@@ -40,7 +41,8 @@ species <-
     "Onthophagus sagittarius",
     "Onthophagus taurus",
     "Sisyphus rubrus",
-    "Sisyphus spinipes")
+    "Sisyphus spinipes"
+  )
 
 length(species)
 
@@ -50,21 +52,18 @@ species_info <-
 # UPDATE THIS TO INCUDE COLUMNS IN COMMON WITH dungfaunaR
 
 dbs_ala <-
-
   # For some reason including "Sisyphus spinipes" with other species results in
   # an error, hence the bind_rows
   bind_rows(
-
     galah_call() |>
       galah_identify(species[1:21]) |>
-      #galah_group_by(species) |>
+      # galah_group_by(species) |>
       galah_apply_profile(CSDM) |>
       galah_select(individualCount, group = c("basic", "event")) |>
       atlas_occurrences(),
-
     galah_call() |>
       galah_identify(species[22]) |>
-      #galah_group_by(species) |>
+      # galah_group_by(species) |>
       galah_apply_profile(CSDM) |>
       galah_select(individualCount, group = c("basic", "event")) |>
       atlas_occurrences()
@@ -111,26 +110,30 @@ l_map <-
   leaflet() |>
   addProviderTiles("Esri.WorldImagery", group = "Satellite")
 
-factpal <- colorFactor(palette = "viridis",
-                       unique(map_df$occurrenceStatus))
+factpal <- colorFactor(
+  palette = "viridis",
+  unique(map_df$occurrenceStatus)
+)
 
 names(map_df) |>
-  purrr::walk( function(df) {
+  purrr::walk(function(df) {
     l_map <<- l_map |>
-      addCircleMarkers(data = map_df[[df]],
-                       lng = ~decimalLongitude,
-                       lat = ~decimalLatitude,
-                       label = ~str_c(dataResourceName, occurrenceStatus, sep = " "),
-                       radius = ~log(total),
-                       group = df,
-                       color = ~factpal(occurrenceStatus),
-                       opacity = 1)
+      addCircleMarkers(
+        data = map_df[[df]],
+        lng = ~decimalLongitude,
+        lat = ~decimalLatitude,
+        label = ~ str_c(dataResourceName, occurrenceStatus, sep = " "),
+        radius = ~ log(total),
+        group = df,
+        color = ~ factpal(occurrenceStatus),
+        opacity = 1
+      )
   })
 
 l_map |>
   addLayersControl(
     baseGroups = names(map_df),
-    #baseGroups = c("Satellite","Boundaries"),
+    # baseGroups = c("Satellite","Boundaries"),
     options = layersControlOptions(collapsed = FALSE)
   )
 
@@ -166,7 +169,8 @@ dbs_ne_wide <-
   pivot_wider(
     id_cols = c(eventID, decimalLatitude, decimalLongitude, eventDate),
     names_from = scientificName,
-    values_from = individualCount)
+    values_from = individualCount
+  )
 # 452 records
 
 dbs_ne_wide |>
@@ -175,10 +179,12 @@ dbs_ne_wide |>
 
 # Visualise seasonality - seems reasonable
 dbs_ne_summary <-
-dbs_ne |>
-  mutate(date = lubridate::as_date(eventDate),
-         month = lubridate::month(date),
-         year = lubridate::year(date)) |>
+  dbs_ne |>
+  mutate(
+    date = lubridate::as_date(eventDate),
+    month = lubridate::month(date),
+    year = lubridate::year(date)
+  ) |>
   group_by(scientificName, month, year) |>
   summarise(count = mean(individualCount, na.rm = TRUE)) |>
   mutate(date = dmy(str_c(14, month, year, sep = "/")), .after = year)
@@ -186,9 +192,10 @@ dbs_ne |>
 library(plotly)
 
 plot_ly(dbs_ne_summary |> ungroup(),
-        x = ~date, y = ~count, hoverinfo='text',
-        text= ~str_c(scientificName, date, sep = " ")) |>
-  add_lines(color=~scientificName)
+  x = ~date, y = ~count, hoverinfo = "text",
+  text = ~ str_c(scientificName, date, sep = " ")
+) |>
+  add_lines(color = ~scientificName)
 
 
 # usethis::use_data(dbs_ala, overwrite = TRUE)

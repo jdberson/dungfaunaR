@@ -1,4 +1,3 @@
-
 #' Run the shiny app visualisation
 #'
 #' Starts a visualisation of the dataset in a shiny app that can be
