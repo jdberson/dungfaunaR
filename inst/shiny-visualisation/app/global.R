@@ -3,8 +3,6 @@ library(sf)
 library(lubridate)
 library(stars)
 
-#devtools::load_all()
-
 # load the data table and format it for the dashboard
 data('dungfauna_aus')
 table <- dungfauna_aus
