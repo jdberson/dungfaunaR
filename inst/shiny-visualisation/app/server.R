@@ -323,8 +323,8 @@ function(input, output, session) {
       geom_dl(aes(label=year), method=list('last.points', cex=1.5))
 
     if (nrow(dat) > 70) {
-      # plt <- plt + geom_smooth(method = lm, formula = y ~ splines::bs(x, 3), se = TRUE, aes(fill=year))
-      plt <- plt + geom_smooth(method = 'loess', se = TRUE, aes(fill=year))
+      plt <- plt + geom_smooth(method = lm, formula = y ~ splines::bs(x, 3), se = TRUE, aes(fill=year))
+      # plt <- plt + geom_smooth(method = 'loess', se = TRUE, aes(fill=year))
       # plt <- plt + geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs", k = 3), se = TRUE, aes(fill=year))
 
     }
