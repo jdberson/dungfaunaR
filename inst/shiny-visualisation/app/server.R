@@ -337,10 +337,7 @@ function(input, output, session) {
   }
   output$scatterSelected <- renderPlot({
     show_scatter_plot(input$color)
-  }) %>% bindCache(input$nav, input$monthrange, input$color, input$species, input$daterange, rounded_map_bounds())
-  output$scatterSelected2Months <- renderPlot({
-    show_scatter_plot(input$color, 2)
-  }) %>% bindCache(input$nav, input$monthrange, input$color, input$species, input$daterange, rounded_map_bounds())
+  }) %>% bindCache(input$nav, input$monthrange, input$color, input$species, input$daterange, input$datasetName, rounded_map_bounds())
 
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
