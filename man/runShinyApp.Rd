@@ -11,9 +11,9 @@ Starts a visualisation of the dataset in a shiny app that can be
 viewed locally in the browser. After calling this function,
 If the app window doesn't start automatically,
 navigate to the port printed to your console
-(usually \url{localhost:8888}) in your web browser.
+(usually \url{localhost:5197}) in your web browser.
 }
 \examples{
 # start the visualisation with:
-dungfaunaR::runShinyApp()
+# dungfaunaR::runShinyApp()
 }

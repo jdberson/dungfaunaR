@@ -119,16 +119,16 @@ year_selection_panel <- absolutePanel(
 
 data_menu_inputs <- function() {
   return(div(
-    selectInput(
-      "color",
-      "Select a measure",
-      vars,
-      selected = 'Average number of beetles trapped',
-      width = '100%'
-    ),
+    # selectInput(
+    #   "color",
+    #   "Select a measure",
+    #   vars,
+    #   selected = 'Average number of beetles trapped',
+    #   width = '100%'
+    # ),
     selectInput(
       "datasetName",
-      "Select a data source",
+      "Select a data set",
       dataset_sources,
       selected = 'All',
       width = '100%'
@@ -202,7 +202,7 @@ data_menu_items <- div(
           "Click the above arrow to view the map",
           align = 'center'
         ),
-        h4("Select a measure, species and year to view on the map ", align = 'center')
+        h4("Filter by data set, species and year", align = 'center')
       ),
       data_menu_inputs(),
 
@@ -294,14 +294,7 @@ collections_tab <- tabPanel(
       ),
     ),
     # Shiny versions prior to 0.11 should use class = "modal" instead.
-    data_menu_items,
-    tags$div(
-      id = "cite",
-      'Data compiled for ',
-      tags$em('TODO'),
-      ' TODO.',
-      align = 'right'
-    )
+    data_menu_items
   )
 )
 if (include_data_table) {
@@ -314,8 +307,7 @@ if (include_data_table) {
         "States",
         c(
           "All states" = "",
-          structure(unique(alldatas$state), names = unique(alldatas$state)),
-          "wa" = "wa"
+          structure(unique(alldatas$state), names = unique(alldatas$state))
         ),
         multiple = TRUE
       )
@@ -345,6 +337,18 @@ if (include_data_table) {
         min = 0,
         value = 1000000
       )
+    ),
+    column(
+      3,
+      selectInput(
+        "speciesTable",
+        "Species",
+        c(
+          "All species" = "",
+          structure(species, names = names(species))
+        ),
+        multiple = TRUE
+      )
     )),
     hr(),
     DT::dataTableOutput("datatable")
@@ -354,31 +358,6 @@ if (include_data_table) {
 }
 
 main <- navbarPage(
-    title = span(
-      tags$a(
-        href = 'https://uwa.edu.au',
-        img(src = 'logos/uwa.png', width = 100),
-        style = 'text-decoration: none;'
-      ),
-      tags$a(
-        href = 'https://dungbeetles.shinyapps.io/dungbeetlemaps/',
-        img(src = 'logos/dung-beetle-maps.png', width = 150, style = 'padding-right: 15px; padding-left: 15px;'),
-        style = 'text-decoration: none;'
-      ),
-      # only include other logos if not on mobile (so they fit)
-      tags$a(
-        class = 'd-lg-inline d-none',
-        href = 'https://www.mla.com.au/',
-        img(src = 'logos/mla_logo_home.webp', width = 90, style = 'padding-right: 15px;'),
-        style = 'text-decoration: none;'
-      ),
-      tags$a(
-        class = 'd-lg-inline d-none',
-        href = 'https://www.dungbeetles.com.au/',
-        img(src = 'logos/dbee-logo-stacked_primary.png', width = 90),
-        style = 'text-decoration: none;'
-      )
-    ),
     id = "nav",
     collapsible = TRUE,
     theme = bslib::bs_theme(version = 5, bootswatch = 'zephyr'),

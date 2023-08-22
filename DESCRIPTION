@@ -12,7 +12,8 @@ Authors@R:
              role = "aut",
              email = "jake.manger@uwa.edu.au",
              comment = c(ORCID = "0000-0002-0686-4788")))
-Description: What the package does (one paragraph).
+Description: This is a data package with data on occurrence and abundance 
+             records for deliberately introduced dung beetles in Australia.
 License: CC BY 4.0
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -26,19 +27,20 @@ Depends:
 LazyData: true
 Imports:
     directlabels (>= 2021.1.13),
-    dplyr (>= 1.1.0),
-    ggplot2 (>= 3.4.1),
+    dplyr (>= 1.1.2),
+    ggplot2 (>= 3.4.3),
     ggtext (>= 0.1.2),
-    htmlwidgets (>= 1.5.4),
+    htmlwidgets (>= 1.6.2),
     leafem (>= 0.2.0),
-    leaflet (>= 2.1.1),
+    leaflet (>= 2.1.2),
     leaflet.extras (>= 1.0.0),
     lubridate (>= 1.9.2),
     RColorBrewer (>= 1.1.3),
-    scales (>= 1.2.0),
+    scales (>= 1.2.1),
+    sf (>= 1.0.14),
     shinyalert (>= 3.0.0),
     shinyjs (>= 2.1.0),
-    shinyWidgets (>= 0.7.1),
-    stringr (>= 1.5.0)
-Remotes: 
-    jakemanger/leaflet.extras
+    shinyWidgets (>= 0.7.6),
+    stars (>= 0.6.3),
+    stringr (>= 1.5.0),
+    tidyr (>= 1.3.0)

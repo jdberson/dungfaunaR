@@ -5,7 +5,24 @@
 \alias{county_stateProvince_aus}
 \title{Shapefile for linking geographic points to country - county Darwin Core terms}
 \format{
-An object of class \code{sf} (inherits from \code{data.frame}) with 547 rows and 5 columns.
+An \code{sf} MULTIPOLYGON object with 547 features and 4 fields:
+\describe{
+\item{county}{\url{http://rs.tdwg.org/dwc/terms/county} Local government
+areas in Australia, nested within stateProvince. The geometry provides the
+boundaries of these areas.}
+\item{stateProvince}{\url{http://rs.tdwg.org/dwc/terms/stateProvince} The
+State or Territory within which the county / local government area is
+located.}
+\item{country}{\url{http://rs.tdwg.org/dwc/terms/country} All features are
+within Australia}
+\item{countryCode}{\url{http://rs.tdwg.org/dwc/terms/countryCode} The code
+used for Australia}
+\item{geometry}{\url{http://rs.tdwg.org/dwc/terms/geometry} Multipolygons
+providing the boundaries for county / local government area.}
+}
+}
+\source{
+\url{https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files/LGA_2022_AUST_GDA2020_SHP.zip}
 }
 \usage{
 county_stateProvince_aus
@@ -13,7 +30,9 @@ county_stateProvince_aus
 \description{
 Within Australia, the next smaller administrative unit after country is
 State / Territory, after which comes a 'Local Government Area'. These are
-equivalent to the Darwin Core terms stateProvince and county.
+equivalent to the Darwin Core terms stateProvince and county respectively.
+We have included these data within the package to aid with assigning the
+county, stateProvince, country and countryCode fields to the dung fauna data.
 }
 \details{
 The Australian Bureau of Statistics (ABS) provides shapefile data for local
@@ -21,8 +40,7 @@ government areas in Australia which also includes the associated higher
 level geographies (State / Territory and Country). More information is here:
 \url{https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files}.
 
-The download link for the raw data is (Local Government Areas - 2022 -
-Shapefile in GDA2020):
-https://www.abs.gov.au/statistics/standards/australian-statistical-geography-standard-asgs-edition-3/jul2021-jun2026/access-and-downloads/digital-boundary-files/LGA_2022_AUST_GDA2020_SHP.zip
+The data downloaded from ABS has been slightly modified with empty geometries
+removed, terms renamed to Darwin Core terms, and not needed fields removed.
 }
 \keyword{datasets}

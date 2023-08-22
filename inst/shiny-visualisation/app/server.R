@@ -1,10 +1,8 @@
 library(leaflet)
 library(RColorBrewer)
 library(scales)
-# library(lattice)
 library(dplyr)
 library(lubridate)
-library(leaflet.extras)
 library(stringr)
 library(htmlwidgets)
 library(ggplot2)
@@ -13,46 +11,12 @@ library(leafem)
 library(shinyalert)
 library(shinyWidgets)
 
-
-if (include_predictions) {
-  # load data
-  # full 26 interval precision (uses more ram)
-  if (!exists('r_stack')) {
-    r_stack <- readRDS('./data/predictions_for_dashboard.rds')
-  }
-  # half 13 interval precision (uses less ram)
-  # IF YOU CHANGE THIS THEN DELETE data/predictions_range.rds!
-  # r_stack <- readRDS('./data/predictions_for_dashboard_half_prec.rds')
-
-  r_stack_names <- names(r_stack)
-  if (!file.exists('./data/month_name_custom.rds')) {
-    days <- st_get_dimension_values(r_stack, 3)
-
-    dates <- ymd('2021-12-31') + days(days)
-    month.name.custom <- paste(day(dates), month.name[month(dates)])
-    saveRDS(month.name.custom, './data/month_name_custom.rds')
-  } else {
-    month.name.custom <- readRDS('./data/month_name_custom.rds')
-  }
-
-  if (!file.exists('./data/predictions_range.rds')) {
-    predictions_range <- purrr::map(r_stack, function(x) {range(x, na.rm=TRUE)})
-    # predictions_range <- c(
-    #   min(unlist(lapply(predictions_range, `[[`, 1)), na.rm=TRUE),
-    #   max(unlist(lapply(predictions_range, `[[`, 2)), na.rm=TRUE)
-    # )
-    saveRDS(predictions_range, './data/predictions_range.rds')
-  } else {
-    predictions_range <- readRDS('./data/predictions_range.rds')
-  }
-  # sf::st_crs(r_stack) <- 4326
-}
-
 datadata <- alldatas
+num_unique_years <- length(unique(as.character(year(datadata$date))))
 # colorpalette <- 'viridis'
 colorpalette <- 'YlOrRd'
 # aggregation_function <- sum
-aggregation_function <- mean
+aggregation_function <- function(x) { mean(x, na.rm=TRUE) }
 
 datadata <- datadata[order(datadata$abundance_total, decreasing=TRUE),]
 
@@ -60,17 +24,7 @@ leaflet_base_map <- leaflet(options=leafletOptions(zoomControl = TRUE, zoomSnap 
   # addTiles() %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   setView(lng = 139.94, lat = -29.82, zoom = 5) %>%
-  setMaxBounds(91, -65,  197, 5) %>%
-  addSearchOSM(
-    options = searchOptions(
-      collapsed = FALSE,
-      autoCollapse = TRUE,
-      zoom=10,
-      hideMarkerOnCollapse=TRUE,
-      textPlaceholder='Search for an address    🔍︎',
-      url = 'https://nominatim.openstreetmap.org/search.php?format=jsonv2&countrycodes=AU&q={s}'
-    )
-  )
+  setMaxBounds(91, -65,  197, 5)
 
 function(input, output, session) {
 
@@ -309,7 +263,7 @@ function(input, output, session) {
     }
     legend_text <- measure_to_readable_text(measure, input$species, markdown=TRUE)
 
-    plt <- ggplot(dat, aes(x=date, y=.data[[colorBy]], group=year, colour=year)) +
+    plt <- ggplot(dat, aes(x=date, y=.data[[colorBy]], group=year, color=year)) +
       scale_colour_discrete(guide = 'none') +
       scale_x_date(date_labels = '%b', breaks=date_brks, expand=expand_amount) +
       scale_y_continuous(trans='log1p', breaks=y_brks) +
@@ -319,28 +273,25 @@ function(input, output, session) {
         axis.title = element_text(size = 18),
         axis.title.y = ggtext::element_markdown(size=18)
       ) +
-      labs(x = 'Date', y=legend_text) +
+      labs(x = 'Date', y=legend_text)
+
+    index <- rowSums(table(dat$year, months(dat$date)) != 0) > 2
+    years_with_enough_d <- names(index[index])
+    plt <- plt + geom_smooth(data=dat[dat$year %in% years_with_enough_d,], method = lm, formula = y ~ splines::bs(x, 3), se = FALSE, aes(fill=year)) +
+       geom_dl(aes(label=year), method=list('last.points', cex=1.5))
+    plt <- plt + geom_point(data=dat[!(dat$year %in% years_with_enough_d),], alpha=0.4) +
       geom_dl(aes(label=year), method=list('last.points', cex=1.5))
-
-    if (nrow(dat) > 70) {
-      # plt <- plt + geom_smooth(method = lm, formula = y ~ splines::bs(x, 3), se = TRUE, aes(fill=year))
-      plt <- plt + geom_smooth(method = 'loess', se = TRUE, aes(fill=year))
-      # plt <- plt + geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs", k = 3), se = TRUE, aes(fill=year))
-
-    }
-
-    if (nrow(dat) < 2000) {
-      plt <- plt + geom_point(alpha=0.3)
-    }
+    plt <- plt + geom_point(alpha=0.1) +
+      geom_dl(aes(label=year), method=list('last.points', cex=1.5))
 
     plt
   }
   output$scatterSelected <- renderPlot({
-    show_scatter_plot(input$color)
-  }) %>% bindCache(input$nav, input$monthrange, input$color, input$species, input$daterange, rounded_map_bounds())
+    show_scatter_plot('abundance')
+  }) %>% bindCache(input$nav, input$monthrange, 'abundance', input$species, input$daterange, rounded_map_bounds())
   output$scatterSelected2Months <- renderPlot({
-    show_scatter_plot(input$color, 2)
-  }) %>% bindCache(input$nav, input$monthrange, input$color, input$species, input$daterange, rounded_map_bounds())
+    show_scatter_plot('abundance', 2)
+  }) %>% bindCache(input$nav, input$monthrange, 'abundance', input$species, input$daterange, rounded_map_bounds())
 
   # This observer is responsible for maintaining the circles and legend,
   # according to the variables the user has chosen to map to color and size.
@@ -351,7 +302,7 @@ function(input, output, session) {
     print('running plot circle markers on data collection map')
     print(input$nav)
 
-    colorBy <- paste0(input$color, '_', input$species)
+    colorBy <- paste0('abundance', '_', input$species)
 
     d <- dataSummarised()
 
@@ -367,10 +318,16 @@ function(input, output, session) {
 
     colorData <- d[[colorBy]]
     # pal <- colorBin(colorpalette, colorData, 7, pretty = TRUE, na.color = 'transparent')
-    pal <- colorNumeric(colorpalette, colorData, 7, na.color = rgb(0,0,0,0.08))
+
+    if (all(is.na(colorData))) {
+      pal <- colorFactor(colorpalette, colorData, 7, na.color = rgb(0,0,0,0.08))
+    } else {
+      pal <- colorNumeric(colorpalette, colorData, 7, na.color = rgb(0,0,0,0.08))
+    }
+
     # bins <- colorQuantile(colorpalette, colorData,  na.rm=TRUE, names=FALSE)
 
-    # sizeBy <- paste0(input$color, '_', input$species)
+    # sizeBy <- paste0('abundance', '_', input$species)
     # radius <- dataSummarised()[[sizeBy]] / max(dataSummarised()[[sizeBy]]) * 60000 + 500
     radius <- 4
 
@@ -401,7 +358,7 @@ function(input, output, session) {
         #   )
         # }
       # )
-  }) %>% bindEvent(input$nav, input$monthrange, input$color, input$species, input$daterange, input$datasetName)
+  }) %>% bindEvent(input$nav, input$monthrange, 'abundance', input$species, input$daterange, input$datasetName)
 
   # Show a popup at the given location
   showdatacodePopup <- function(datacode, lat, lng, measure='abundance') {
@@ -478,7 +435,7 @@ function(input, output, session) {
       return()
 
     isolate({
-      showdatacodePopup(event$id, event$lat, event$lng, input$color)
+      showdatacodePopup(event$id, event$lat, event$lng, 'abundance')
     })
   }) %>% bindEvent(input$map_marker_click)
 
@@ -589,8 +546,8 @@ function(input, output, session) {
 
   observe({
     sites <- if (is.null(input$states)) character(0) else {
-      filter(cleantable, State %in% input$states) %>%
-        `$`('Site') %>%
+      filter(dungfauna_occurrence, stateProvince %in% input$states) %>%
+        `$`('locationID_site') %>%
         unique() %>%
         sort()
     }
@@ -615,14 +572,15 @@ function(input, output, session) {
   })
 
   output$datatable <- DT::renderDataTable({
-    df <- cleantable %>%
+    df <- dungfauna_occurrence %>%
       filter(
-        Abundance >= input$minTotalAbundance,
-        Abundance <= input$maxTotalAbundance,
-        is.null(input$states) | State %in% input$states,
-        is.null(input$sites) | Site %in% input$sites
+        individualCount >= input$minTotalAbundance,
+        individualCount <= input$maxTotalAbundance,
+        is.null(input$states) | stateProvince %in% input$states,
+        is.null(input$sites) | locationID_site %in% input$sites,
+        is.null(input$speciesTable) | scientificName %in% input$speciesTable
       ) %>%
-      mutate('Click to view on map' = paste('<a class="go-map" href="" data-lat="', Lat, '" data-long="', Long, '" data-data="', paste0(Site, '_', State), '"><i class="fa fa-crosshairs"></i></a>', sep=""))
+      mutate('Click to view on map' = paste('<a class="go-map" href="" data-lat="', decimalLatitude, '" data-long="', decimalLongitude, '" data-data="', paste0(locationID_site, '_', stateProvince), '"><i class="fa fa-crosshairs"></i></a>', sep=""))
     action <- DT::dataTableAjax(session, df, outputId = "datatable")
 
     DT::datatable(df, options = list(ajax = list(url = action), columnDefs=list(list(visible=FALSE, targets=c('datacode')))), escape = FALSE)
@@ -631,7 +589,7 @@ function(input, output, session) {
   ## POPUPs
   shinyalert(
     title = "Welcome!",
-    text = 'This website presents data from dung beetle monitoring conducted by the Dung Beetle Ecosystem \n Engineers (DBEE) project. Below is some important information to read before \n proceeding. \n \n Data can be explored in the Collection tab. The data can be filtered by zooming into an area on the \n map, by changing the included months on the bottom slider, or by changing the species or years \n selected in the right-hand menu. Searching for an address will zoom the map to that location. \n \n The graph on the right in the Collection tab shows the predicted number or biomass of beetles \n caught in a trap for any given date for the selected data (map area, species and year(s)). \n Zooming in to the map will reveal the raw data points for the selected area. \n \n Clicking on a site location on the map will provide information on the average number of beetles trapped \n at that site, and the number of times trapping took place. As dung beetles are seasonal in their level \n of activity, it is most useful to read the site information in tandem with information on the graph. \n This is because the averages for each species may not reflect their seasonal peak in \n numbers/biomass. \n \n Note that the points on the map in the Collection tab show the approximate location of \n where traps were set. We have randomly moved points to protect landholder privacy. This may \n sometimes result in locations over water – rest assured we did not trap dung beetles in the ocean! \n \n The data collected by the DBEE project can be used to predict the activity levels of dung beetles for \n locations that were not sampled by the project. The Prediction tab shows some preliminary \n predictions. Please be aware that these predictions will be wrong in many cases and are included to \n show what can be done with the data. We will update this tab with more accurate predictions \n over time. \n \n By clicking OK you are agreeing that the website and data are provided as is and without warranty \n including without limitation, any warranty as to accuracy, reliability, completeness, merchantability \n or ﬁtness for any purpose.',
+    text = 'Use the dashboard to explore the data that is included in the submitted manuscript by Berson et al.',
     size = "m",
     closeOnEsc = FALSE,
     closeOnClickOutside = FALSE,

@@ -3,74 +3,69 @@ library(sf)
 library(lubridate)
 library(stars)
 
-#devtools::load_all()
-
 # load the data table and format it for the dashboard
-data('dungfauna_aus')
-table <- dungfauna_aus
-# get variables we want
-table <- table %>% select(
+table <-
+  dungfauna_occurrence |>
+
+  dplyr::mutate(
+    date = lubridate::as_date(eventDate_setup),
+    trap = dplyr::if_else(base::is.na(locationID_trap), locationID_site, locationID_trap)
+    ) |>
+
+  dplyr::select(
   id = eventID,
-  state=stateProvince,
-  site=locationID_site,
-  trap=locationID_trap,
-  latitude=decimalLatitude,
-  longitude=decimalLongitude,
-  year=year,
-  month=month,
-  day=day,
-  species=scientificName,
-  abundance=individualCount,
+  state = stateProvince,
+  site = locationID_site,
+  trap,
+  latitude = decimalLatitude,
+  longitude = decimalLongitude,
+  date,
+  species = scientificName,
+  abundance = individualCount,
   #biomass=individualBiomass,
-  datasetName=datasetName,
+  datasetName,
   occurrenceStatus
 ) |>
-  mutate(day = if_else(is.na(day), 1, day)) |>
-  mutate(trap = if_else(is.na(trap), site, trap)) |>
 
   # Temporary hack to include a biomass variable - JB to fix
-  mutate(biomass = rnorm(length(datasetName), 100))
+  dplyr::mutate(biomass = stats::rnorm(base::length(datasetName), 100)) |>
 
-table$date <- ymd(paste(table$year, table$month, table$day, sep='-'))
-table <- table %>% subset(select=-c(year, month, day))
-
-# remove duplicated data - should not be duplicates
-# table <- table[!duplicated(table[!names(table) %in% c('abundance', 'biomass')]),]
-# table <- table[!duplicated(table[!names(table) %in% c('abundance')]),]
-
-# Jake B FIX THE DATA!
-# remove nas - this removes survey data, reconsider how to include this
-# table <- table %>% tidyr::drop_na(site, trap, abundance)
-# table$biomass[is.na(table$biomass)] <- 0
-
-# There are data that come from surveys / museum records etc. These will have
-# an occurrenceStatus of "present" but a count of NA. Need to decide how to
-# incorporate these data. For now, assign these values 1.
-
-table <-
-  table |>
-  mutate(abundance = case_when(
-    is.na(abundance) & occurrenceStatus == "present" ~ 1,
-    is.na(abundance) & occurrenceStatus == "absent" ~ 0,
+  # There are data that come from surveys / museum records etc. These will have
+  # an occurrenceStatus of "present" but a count of NA. Need to decide how to
+  # incorporate these data. For now, assign these values 1.
+  dplyr::mutate(abundance = dplyr::case_when(
+    base::is.na(abundance) & occurrenceStatus == "present" ~ 1,
+    base::is.na(abundance) & occurrenceStatus == "absent" ~ 0,
     TRUE ~ abundance
   ))
 
-alldatas <- table %>%
-  tidyr::pivot_wider(names_from=species, values_from = c(abundance, biomass), values_fill=0)
+dungfauna_occurrence <- dungfauna_occurrence |>
+  mutate(
+    datacode = paste0(locationID_site, '_', stateProvince)
+  )
 
+alldatas <-
+  table |>
+  tidyr::pivot_wider(
+    names_from=species,
+    values_from = c(abundance, biomass),
+    values_fill=0) |>
+  dplyr::mutate(
+    abundance_total = base::rowSums(dplyr::across(dplyr::contains("abundance"))),
+    biomass_total = base::rowSums(dplyr::across(dplyr::contains("biomass"))),
+    datacode = dplyr::row_number()
+  )
+#row.names(alldatas) <- alldatas$datacode
 
 include_predictions <- FALSE
 include_data_table <- TRUE
 
 
-alldatas$abundance_total <- rowSums(alldatas[ , grepl( "abundance" , names( alldatas ) ) ])
-alldatas$biomass_total <- rowSums(alldatas[ , grepl( "biomass" , names( alldatas ) ) ])
-alldatas$date <- as.Date(alldatas$date, format="%d/%m/%Y")
-alldatas <- alldatas %>% mutate(
-  datacode=row_number()
-)
 
-row.names(alldatas) <- alldatas$datacode
+#alldatas$date <- as.Date(alldatas$date, format="%d/%m/%Y")
+
+
+
 
 foo <- alldatas[ , grepl( "abundance" , names( alldatas ))]
 original_names <- colnames(foo)
@@ -121,3 +116,14 @@ if (!file.exists('./data/month_name_custom.rds')) {
 } else {
   month.name.custom <- readRDS('./data/month_name_custom.rds')
 }
+
+# Clear the objects created while running the shiny app
+# Note that we are not clearing the dungfauna_occurrence object as this
+# may have been loaded prior to loading the app - not sure if this is the
+# best practice
+onStop(function() {
+  rm(list = c("alldatas", "cleantable", "foo", "table", "dataset_sources",
+              "include_data_table", "include_predictions", "month.name.custom",
+              "original_names", "species", "species_choices"),
+     envir = .GlobalEnv)
+})

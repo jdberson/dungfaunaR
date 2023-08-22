@@ -1,0 +1,160 @@
+"sample_id","site","date_setup","date_collect","verbatimLongitude","verbatimLatitude","coordinate_level","coordinate_source","verbatimCoordinateSystem","samplingProtocol","gazella","alexis","viridulus","intermedius","militaris","sagittarius","spinipes","rubrus","africanus","pecuarius","nigriventris","vanderkelleni","binodis","caffer"
+"PS1","Mt Haldon",2001-11-05,2001-11-05,152.25511,-27.77334,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS2","Windrush Hill",2001-11-16,2001-11-16,152.62743,-26.91502,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS3","Manitou",2001-11-18,2001-11-18,152.55711,-26.89191,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS4a","Renral_Greentree",2001-11-24,2001-11-24,151.38083,-25.52485,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS4b","Renral_Greentree",2001-11-23,2001-11-23,151.38083,-25.52485,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS5","Floravale",2001-12-03,2001-12-03,152.35491,-26.84673,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS6","Ripple Downs",2001-11-25,2001-11-25,150.1425,-27.9364,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS7","Coo-ee",2001-12-04,2001-12-04,151.256114,-26.299593,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,1,NA,1,NA,NA,NA,NA,NA,NA
+"PS8","Kilcoy_a",2001-12-07,2001-12-07,152.519929,-26.95108,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS9","Boondooma",2001-11-19,2001-11-19,151.27716,-26.11849,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,NA,1,NA,NA,1,1,NA,NA,NA,NA,NA
+"PS10","Dorset",2001-10-12,2001-10-12,150.054059,-26.26591,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS11","Roseville",2001-11-16,2001-11-18,152.58079,-26.91767,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS12","Tooloorum",2001-11-29,2001-11-29,152.615887,-27.199199,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS13","Sunset Charolais",2001-11-13,2001-11-13,152.577003,-27.848924,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS14","Hivesville",2001-11-01,2001-11-01,151.604212,-26.111279,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,NA,1,NA,NA,1,1,NA,NA,NA,NA,NA
+"PS15","The Hollow",2001-10-20,2001-10-20,152.011398,-27.988866,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS16","Stanthorpe_a",2001-11-29,2001-11-29,151.93428,-28.65584,"nearest_town","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,1,1,NA,NA,NA,NA
+"PS17","Char Col",2001-11-28,2001-11-28,152.3758,-27.0852,"nearest_town","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS18","Lenroy",2001-12-01,2001-12-01,148.522752,-26.481544,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS19","Coochin Coochin",2001-10-29,2001-10-29,152.637894,-28.132315,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS20","The Overflow",2001-11-01,2001-11-01,152.85688,-27.92911,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS21","Glenroy",2001-11-26,2001-11-26,152.012193,-27.298198,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS22","Homewood Farm",2001-11-04,2001-11-04,152.353041,-27.73635,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,1,NA,NA,NA,NA,1,NA,NA,NA,NA
+"PS23","East Grove",2001-11-05,2001-11-05,152.868811,-28.210663,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,1,NA,NA,NA,NA,NA,NA,NA
+"PS24","Lansdowne Farm",2001-10-31,2001-10-31,152.31654,-27.65039,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,NA,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS25","WarragulView",2001-11-03,2001-11-03,152.39404,-27.62864,"nearest_town","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS26","Cryna Hills",2001-10-28,2001-10-28,152.994958,-28.020779,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS27","Koora",2001-11-28,2001-11-28,152.39722,-27.05161,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS28","Cooinda",2001-11-12,2001-11-12,151.53857,-26.04376,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS29","Erinvale",2001-11-04,2001-11-04,152.32837,-27.68798,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS31","Happy Valley",2001-11-10,2001-11-10,151.59856,-26.16172,"nearest_town","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS32","Princes Street",2001-11-28,2001-11-28,152.77621,-26.95389,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS33","Deepbank",2001-11-28,2001-11-28,151.188943,-25.604265,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS34","Mt Brisbane",2001-12-02,2001-12-02,152.579082,-27.149607,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS35","Lelant",2001-12-12,2001-12-12,150.94351,-25.99319,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,NA,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS36","Range View",2001-12-11,2001-12-11,149.935541,-26.663228,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS37","Sarner Alp",2001-12-11,2001-12-11,152.300118,-26.939985,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,1,1,NA,NA,NA,NA,NA,NA,NA
+"PS38","Craiglea",2002-01-20,2002-01-20,151.092683,-24.843657,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS39","werona",2001-12-12,2001-12-12,151.37831,-26.5495,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS40","Ochilview",2002-01-31,2002-01-31,153.19843,-28.11853,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,1,1,NA,NA
+"PS41","Ochilview",2002-01-31,2002-01-31,153.19843,-28.11853,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,1,NA,NA,NA,NA,NA,1,1,NA,NA
+"PS42","Camara",2001-11-27,2001-11-27,150.28974,-27.97957,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS43","Kantaka",2001-01-28,2001-01-28,151.53577,-24.76979,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS44","Mt Wallaby",2002-01-30,2002-01-30,151.583407,-24.775464,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS45","Upsandowns",2001-12-17,2001-12-17,151.742021,-26.545489,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS46","Auburn Station",2002-02-01,2002-02-01,150.61396,-25.95195,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS47","Glengoon",2001-12-18,2001-12-18,151.79691,-26.15045,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,1,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS48","Wenzels road",2001-12-12,2001-12-12,151.804743,-26.48468,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,1,1,NA,NA,NA,1,NA
+"PS49","Bellbird Rd",2002-01-02,2002-01-02,151.85939,-26.61223,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS50","Karingal",2001-12-19,2001-12-19,151.122372,-25.079229,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,NA,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS51","Crystal Springs",2001-12-22,2001-12-22,151.723184,-26.064871,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS53","Akuna",2001-01-18,2001-01-18,149.59561,-26.3905,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS54","Glen Eva",2001-01-28,2001-01-28,151.602053,-24.822631,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS55","Boogalgopal",2002-01-07,2002-01-07,150.98895,-25.06842,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS56","Wattlecamp",2001-12-12,2001-12-12,152.001231,-26.437204,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS57","Currajong",2001-12-27,2001-12-27,151.13191,-24.96633,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS58","Maroolingah",2002-02-02,2002-02-02,151.79693,-24.26735,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS59","Auburn Station",2001-02-01,2001-02-01,150.61396,-25.95195,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS60a","Rosedale road",2002-01-25,2002-01-25,151.95959,-24.62947,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,1,1,1,1,NA,NA,NA,NA,NA,NA
+"PS60b","Fingerbaord Road",2002-02-08,2002-02-08,151.58097,-24.33229,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS61","Proserpine",2002-02-10,2002-02-10,148.6666,-20.38718,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS62","Heathwood",2002-02-11,2002-02-11,151.525717,-24.390788,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS63a","Ceder Grove",2002-02-02,2002-02-02,153.1994,-28.11946,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,1,1,NA,NA
+"PS63b","Ceder Grove",2002-02-02,2002-02-02,153.1994,-28.11946,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,1,1,NA,NA
+"PS64a","Tarlington Farm",2002-02-04,2002-02-04,153.22773,-28.0816,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS64b","Tarlington Farm",2002-02-04,2002-02-04,153.22773,-28.0816,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA
+"PS65","Langley Flats",2002-01-07,2002-01-07,151.250768,-25.114651,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS66","Killarney",2002-02-13,2002-02-13,151.549747,-24.280731,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS67","Langley Flats",2002-01-07,2002-01-07,151.250768,-25.114651,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS68","Langley Flats",2001-12-19,2001-12-19,151.250768,-25.114651,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS69","Laglan",2002-02-02,2002-02-02,152.53299,-27.58197,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS70","Giru",2002-03-18,2002-03-18,147.11356,-19.49306,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS71","Sunnyholt",2002-02-11,2002-02-11,148.86775,-25.30284,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS73","Maydo_Biami",2002-03-17,2002-03-17,151.68429,-27.14283,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS74","Charley Creek",2002-03-21,2002-03-21,144.56438,-21.09638,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS75","Walton Hall",2002-03-09,2002-03-09,149.796815,-27.149335,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS76","Bymount",2002-03-13,2002-03-13,151.61816,-26.96353,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS77","Korcha",2002-03-05,2002-03-05,148.665424,-25.442892,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,1,1,1,1,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS78","Delmont",2002-03-01,2002-03-01,151.62634,-27.255853,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS79","Geijera",2002-02-12,2002-02-12,150.551994,-26.788656,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA
+"PS80","gemaqua",2002-03-12,2002-03-12,152.691698,-26.248797,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS81","Cylis",2002-02-15,2002-02-15,151.1676,-28.01665,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS82","Crowman",2002-02-15,2002-02-17,148.30217,-25.80895,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS83","Glenmore",2002-02-17,2002-02-17,151.46562,-27.86052,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS84","Murralah",2002-03-04,2002-03-04,151.322727,-28.043461,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS85","Wandaloo",2002-02-20,2002-02-20,150.31868,-26.73966,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS86","Running Creek Farm",2002-03-04,2002-03-04,152.26366,-26.06152,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,1,NA,1,NA,NA,NA,NA,NA,NA
+"PS87","Springdale",2002-02-24,2002-02-24,145.48373,-17.16809,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS88","Tolga",2002-02-24,2002-02-24,145.492142,-17.238917,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA
+"PS89","Strathblane",2002-02-11,2002-02-11,149.11871,-25.75232,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS90","Ingham_a",2002-03-27,2002-03-27,146.1666,-18.6666,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS91","Lower Wonga",2002-03-07,2002-03-07,152.51068,-26.08413,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS92","Appleyard rd",2002-04-12,2002-04-12,145.89787,-18.12212,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS93","Swandale",2002-03-03,2002-03-03,152.262762,-25.256485,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,1,1,1,NA,NA,NA,NA,NA,NA
+"PS94","Peakvale",2002-02-01,2002-02-01,147.35438,-23.18612,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS95","Riverside",2002-02-20,2002-02-20,151.92883,-25.340078,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS96","Greentop",2002-03-03,2002-03-03,148.013542,-20.124474,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS97","Fairview",2002-03-01,2002-03-01,151.90834,-27.95477,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS98","Ben Brae",2002-02-26,2002-02-27,152.24115,-26.08717,"nearest_town","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,1,NA,1,NA,NA,NA,NA,NA,NA
+"PS99","Beckalinda",2002-04-01,2002-04-01,152.755701,-26.132953,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,1,NA,1,NA,NA,NA,NA,NA,NA,NA
+"PS100","Sinai Brangus",2002-02-28,2002-02-28,152.324236,-26.111919,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS101","Bunya View",2002-02-22,2002-02-22,151.591846,-26.979664,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS102","Melryn",2002-04-14,2002-04-14,151.30017,-25.58831,"nearest_town","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS103","Sandy Creek",2002-03-10,2002-03-10,147.051525,-19.612584,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS104","Trevelmond",2002-04-15,2002-04-15,145.48059,-17.183625,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,1,1,NA,NA,NA,NA,1,NA,NA,NA
+"PS105","Robinson Rd",2002-03-24,2002-03-24,152.966166,-26.7334756,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS106","Mt Molloy",2002-04-14,2002-04-14,145.35461,-16.64539,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS107","Santos",2002-02-18,2002-02-18,151.552881,-24.257205,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS108","Bow Park",2002-03-17,2002-03-17,141.93375,-20.01753,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS109","Undilla",2002-04-20,2002-04-20,138.638041,-19.624475,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS110","Langshaw",2002-03-24,2002-03-24,152.57857,-26.29665,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS111","Rotherwood",2002-04-28,2002-04-28,151.80403,-26.67086,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS112","Sunnyside",2002-02-19,2002-02-19,151.74097,-27.02715,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS113","Gigoom",2002-03-12,2002-03-12,152.195187,-25.320454,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS114","St Margarets Creek",2002-03-18,2002-03-18,147.028403,-19.487204,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS115","Debngarry Farm",2002-03-12,2002-03-12,145.41745,-17.36251,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,1,NA,1,NA,NA,NA,1,NA,NA,NA
+"PS116","Kairi Station",2002-03-19,2002-03-19,145.56697,-17.217221,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS117","Belle Villa",2002-03-19,2002-03-19,152.289993,-26.082054,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS119","Atherton",2002-03-17,2002-03-17,145.417178,-17.364833,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,NA,NA,NA,NA,NA,NA,1,NA,NA,NA
+"PS120","Winda Creek",2002-04-09,2002-04-15,144.801643,-15.810504,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS121","Maple Hill",2002-04-13,2002-04-13,145.48544,-17.48229,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,1,NA,NA,NA
+"PS123","Malanda_a",2002-03-01,2002-04-30,145.6977,-17.38169,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,1,NA,NA,NA
+"PS124","Rokeby",2002-03-19,2002-03-19,147.00585,-19.62252,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS125","Greenvale_a",2002-04-10,2002-04-10,149.10114,-21.02404,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS126","Sonoma",2002-01-31,2002-01-31,151.67051,-24.4269,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS127","Torver Valley",2002-03-22,2002-03-22,144.14067,-20.68414,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS128","Yarrawonga",2002-02-19,2002-02-19,151.91396,-26.89824,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS129","Elaman Creek",2002-03-24,2002-03-24,152.77476,-26.71668,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS130","Millaa Millaa",2002-02-01,2002-02-01,145.65712,-17.57401,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS131","Pialah Station",2002-04-06,2002-04-06,142.783214,-20.057083,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS132","Pialah Station",2002-04-06,2002-04-06,142.783214,-20.057083,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS133","Russtrees",2002-04-07,2002-04-07,152.80776,-27.08041,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS134","Witta",2002-04-06,2002-04-06,152.81073,-26.69575,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS135","Lacon",2002-01-01,2002-02-28,151.23559,-25.58156,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS136","Davidson Road",2002-04-07,2002-04-07,145.80107,-17.97234,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS137","Seloh Nolem",2002-04-05,2002-04-05,148.48308,-22.307517,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS138","Collingwood road",2002-04-19,2002-04-19,152.07861,-27.37745,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,NA,NA,NA,NA,NA,NA,1,NA,NA,NA
+"PS139","The Springs",2002-02-17,2002-02-17,145.2544,-17.70319,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS140","Kazoo",2002-04-23,2002-04-23,152.987887,-26.765274,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,1,1,1,NA,NA,NA,NA,NA,NA,NA
+"PS141","Cavills Lane",2002-04-08,2002-04-08,146.825524,-19.572779,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS142","Golden Valley",2002-04-15,2002-04-15,145.62,-17.29111,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,NA,1,1,NA,NA,NA,NA,1,NA,NA,NA
+"PS143","Cardowan Station",2002-04-09,2002-04-09,149.0638,-22.1192,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,NA,NA,1,NA,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS144","Cooyar",2002-02-24,2002-02-24,151.83282,-26.98311,"nearest_town","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,NA,NA,1,NA,NA,NA,NA,1,NA
+"PS145","Running Rocks",2002-02-24,2002-02-24,151.93962,-25.297875,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS146","Noonbah",2002-04-22,2002-04-22,143.18638,-24.10783,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS147","Amelia Downs",2002-03-18,2002-03-18,145.37757,-19.62988,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS148","Yarraman",2002-02-18,2002-02-18,151.861765,-26.901051,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS149","Murgon",2002-04-23,2002-04-23,151.978669,-26.215841,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS150","Theresa Downs",2002-04-04,2002-04-04,148.0758,-23.2889,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,NA,1,NA,NA,NA,NA,NA,NA
+"PS151","Gayndah_a",2002-05-01,2002-05-01,151.454,-25.50847,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,1,1,NA,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS152","Solway Station",2002-04-28,2002-04-28,142.696217,-20.095583,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS153","Mt Kingsley",2002-04-27,2002-04-27,148.85305,-25.278842,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,1,1,1,NA,1,1,NA,NA,NA,NA,NA,NA
+"PS154","Childers_a",2002-05-18,2002-05-18,152.27848,-25.24394,"nearest_town","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",NA,1,NA,1,1,1,NA,NA,NA,NA,NA,NA,NA,NA
+"PS155","Milima",2002-05-07,2002-05-13,152.4297,-26.149,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,1,1,1,NA,NA,NA,NA,NA,NA,NA
+"PS156","Norfolk Station",2002-04-30,2002-04-30,138.33033,-19.31354,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS157","Maydo_Biami",2002-04-07,2002-04-07,151.68429,-27.14283,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,1
+"PS158","Flora Downs",2002-04-21,2002-04-21,138.709,-20.071,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS159","Llanarth",2002-06-06,2002-06-06,146.865,-21.304,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,NA,NA,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA
+"PS160","Linley and Dregger",2003-05-12,2003-05-12,142.687596,-18.467153,"property","Google Earth","decimal degrees","QLD 2001-2003 survey using the flotation method",1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA

@@ -1,70 +1,31 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Quick guide
-
-Once you have cloned the repository to your computer, open the project
-and run:
-```
-devtools::install()
-```
-This will install the package to your local library.
-
-The data to use for the dashboard is:
-```
-data(“dungfauna_aus”)
-```
-
-These data contain records from DBEE, QLD and a WA project. Not for
-public release just yet.
-
-To view an interactive visualisation of the data, run
-```
-runShinyApp()
-```
-If the app window doesn't start automatically, navigate to the port printed to
-your console (usually [localhost:5197](localhost:5197)) in your web browser.
-
-
-There will be some further refinements to these data but I think we are
-at a stage to include a dashboard in the package.
-
-So, the aim is to:
-
-# - 1.  incorporate a copy of the dashboard into the package so that when
-#       a user installs the package they can run the dashboard locally.
-# 
-# - 2.  update the dashboard so that it includes
-# 
-# - all species found in the scientificName column (there are now new
-#   species from the QLD and WA projects that will need to be added to the
-#   ‘Select a species’ menu)
-
-# - A new menu item allowing for data to be filtered by datasetName
-#   (i.e. project)
-
-# - Remove the prediction tab
-
-# - Put back in the data tab
-
-- Turn off the jittering of points
-
-- Any other minor changes we think of
-
-**Note: this is not a replacement of the existing dashboard but a
-copy.**
-
 # dungfaunaR
 
-<!-- badges: start -->
+## Overview
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/dungfaunaR)](https://CRAN.R-project.org/package=dungfaunaR)
-[![Codecov test
-coverage](https://codecov.io/gh/jdberson/dungfaunaR/branch/master/graph/badge.svg)](https://app.codecov.io/gh/jdberson/dungfaunaR?branch=master)
-<!-- badges: end -->
+This is a data package with data on occurrence and abundance records for
+deliberately introduced dung beetles in Australia. Currently, the data
+contain 1,752,807 species identifications from 22,718 occurrence
+records, taken from 10,272 sampling events at 546 locations. The data
+also contain 213,538 absence records. The data are explained in detail
+in Berson et al (submitted).
 
-The goal of dungfaunaR is to …
+Code used to format the data can be found in the `data-raw folder` in
+the [dungfaunaR gihub repository](link%20here). Note that we formatted
+and performed checks on data from different projects separately (see
+`data-raw/qld_2001_2010.R`, `data-raw/dafwa_wa_2012_2014.R` and
+`data-raw/dbee_2019_2022.R`), before combining these data into one
+dataset (see `data-raw/dungfauna_aus.R`).
+
+Code used to generate the summary statistics, figures and tables in
+Berson et al (submitted) can by found in the `data-paper` folder within
+the `data-raw` folder.
+
+The data are provided in both wide (`dungfauna_event`) and long
+(`dungfauna_occurrence`) format. Running `dungfaunaR::runShinyApp()`
+will launch a shiny app for visually exploring the data.
 
 ## Installation
 
@@ -76,38 +37,32 @@ You can install the development version of dungfaunaR from
 devtools::install_github("jdberson/dungfaunaR")
 ```
 
-## Example
+## Getting started
 
-This is a basic example which shows you how to solve a common problem:
+After installing the package, the following code load the data into your
+R session:
 
 ``` r
 library(dungfaunaR)
-## basic example code
+
+# To load the data in wide format:
+data("dungfauna_event")
+
+# To load the data in long format:
+data("dungfauna_occurrence")
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+After installing and loading the package, you can explore the data with
+the built-in shiny app using `dungfaunaR::runShinyApp()`
 
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
+## Citation
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this. You could also
-use GitHub Actions to re-render `README.Rmd` every time you push. An
-example workflow can be found here:
-<https://github.com/r-lib/actions/tree/v1/examples>.
+The paper detailing the data is currently submitted as a data paper.
+Please check back here for the correct citation to use when using the
+data.
 
-You can also embed plots, for example:
+## Issues
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+If you find an error or a bug we would love to hear from you! Please let
+us know what you have found by creating an issue at
+<https://github.com/jdberson/dungfaunaR/issues>.
