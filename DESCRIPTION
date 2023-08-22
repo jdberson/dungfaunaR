@@ -9,7 +9,7 @@ Authors@R:
              comment = c(ORCID = "0000-0002-7059-2131")),
       person(given = "Jake",
              family = "Manger",
-             role = "aut",
+             role = c("aut", "cre"),
              email = "jake.manger@uwa.edu.au",
              comment = c(ORCID = "0000-0002-0686-4788")))
 Description: This is a data package with data on occurrence and abundance 

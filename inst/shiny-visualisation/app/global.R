@@ -80,6 +80,7 @@ cleantable <- alldatas %>%
     Site = site,
     State = state,
     datacode = datacode,
+    date = date,
     Abundance = abundance_total,
     Biomass = biomass_total,
     Lat = latitude,
