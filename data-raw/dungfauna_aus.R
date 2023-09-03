@@ -217,8 +217,6 @@ dungfauna_occurrence <-
   pivot_longer(cols = `Bubas bison`:`Sisyphus spinipes`,
                names_to = "scientificName", values_to = "individualCount") |>
 
-  # Following feedback no longer including species information in final data
-
   # Include species information for filtering further on
   left_join(
     db_species |> select(code, scientificName, establishmentMeans, pathway),
@@ -238,13 +236,14 @@ dungfauna_occurrence <-
     # identified to species
     taxonRank =  "species") |>
 
-  # identifiedBy variable has values where the individualCount = 0, these were
-  # initially kept to distinguish instances in the DBEE project where 0 counts
-  # were provided by UWA vs the trap collector. Remove these here as nonsensical
-  # to identify something with a count of 0
-  mutate(
-    identifiedBy = if_else(individualCount == 0, NA_character_, identifiedBy)
-  ) |>
+  # The following can be used to remove the value in identifiedBy where the
+  # individualCount = 0 (i.e., as the species was not identified it may be
+  # sensible to remove this). For now we will keep the identifiedBy value for
+  # cases where individualCount = 0 as it can be useful to know who 'identified'
+  # a species as absent, particularly where all species are absent.
+  # mutate(
+  #   identifiedBy = if_else(individualCount == 0, NA_character_, identifiedBy)
+  # ) |>
 
   # Include catalogNumber for matching DBEE data to what is on ALA
   mutate(
@@ -259,7 +258,6 @@ dungfauna_occurrence <-
   # these ratings into the occurrenceRemarks and remove from count, at the same
   # time remove taurus count photo method comment from occurrenceRemarks where
   # species is not taurus and correct other comments
-
   mutate(
     occurrenceRemarks = case_when(
 
@@ -820,3 +818,56 @@ write.csv(dungfauna_occurrence,
 
 usethis::use_data(dungfauna_event, overwrite = TRUE, compress = "xz")
 usethis::use_data(dungfauna_occurrence, overwrite = TRUE, compress = "xz")
+
+
+# Session info ------------------------------------------------------------
+
+sessionInfo()
+
+# R version 4.3.1 (2023-06-16 ucrt)
+# Platform: x86_64-w64-mingw32/x64 (64-bit)
+# Running under: Windows 11 x64 (build 22621)
+#
+# Matrix products: default
+#
+#
+# locale:
+# [1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8
+# [3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C
+# [5] LC_TIME=English_Australia.utf8
+#
+# time zone: Australia/Perth
+# tzcode source: internal
+#
+# attached base packages:
+# [1] stats     graphics  grDevices utils     datasets  methods   base
+#
+# other attached packages:
+# [1] plotly_4.10.2         leaflet_2.2.0         sf_1.0-14
+# [4] dwcPrepare_0.0.0.9000 lubridate_1.9.2       forcats_1.0.0
+# [7] stringr_1.5.0         dplyr_1.1.2           purrr_1.0.2
+# [10] readr_2.1.4           tidyr_1.3.0           tibble_3.2.1
+# [13] ggplot2_3.4.3         tidyverse_2.0.0
+#
+# loaded via a namespace (and not attached):
+# [1] gtable_0.3.4             htmlwidgets_1.6.2        tzdb_0.4.0
+# [4] leaflet.providers_1.13.0 vctrs_0.6.3              tools_4.3.1
+# [7] crosstalk_1.2.0          generics_0.1.3           parallel_4.3.1
+# [10] proxy_0.4-27             fansi_1.0.4              pkgconfig_2.0.3
+# [13] KernSmooth_2.23-21       data.table_1.14.8        RColorBrewer_1.1-3
+# [16] desc_1.4.2               lifecycle_1.0.3          farver_2.1.1
+# [19] compiler_4.3.1           munsell_0.5.0            htmltools_0.5.6
+# [22] usethis_2.2.2            class_7.3-22             yaml_2.3.7
+# [25] lazyeval_0.2.2           jquerylib_0.1.4          pillar_1.9.0
+# [28] crayon_1.5.2             ellipsis_0.3.2           classInt_0.4-9
+# [31] wk_0.8.0                 tidyselect_1.2.0         digest_0.6.33
+# [34] stringi_1.7.12           rprojroot_2.0.3          fastmap_1.1.1
+# [37] grid_4.3.1               colorspace_2.1-0         cli_3.6.1
+# [40] magrittr_2.0.3           utf8_1.2.3               e1071_1.7-13
+# [43] withr_2.5.0              scales_1.2.1             bit64_4.0.5
+# [46] timechange_0.2.0         httr_1.4.7               bit_4.0.5
+# [49] hms_1.1.3                viridisLite_0.4.2        s2_1.1.4
+# [52] rlang_1.1.1              Rcpp_1.0.11              glue_1.6.2
+# [55] DBI_1.1.3                rstudioapi_0.15.0        vroom_1.6.3
+# [58] jsonlite_1.8.7           R6_2.5.1                 fs_1.6.3
+# [61] units_0.8-3

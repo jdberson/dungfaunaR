@@ -37,7 +37,6 @@ dbee_raw <-
                              "3kg" = "3 kg",
                              "5kg" = "5 kg")))
 
-
 # Darwin Core Event Details -----------------------------------------------
 
 dbee_event <-
@@ -110,9 +109,10 @@ dbee_event <-
 #data("county_stateProvince_aus")
 #data("locality_data_aus")
 
-
 dbee_location <-
   dbee_event |>
+
+  # Calculate location information
   mutate(dwc_Location(
     longitude = longitude,
     latitude = latitude,
@@ -296,7 +296,6 @@ dbee_location2 <-
     )
   )
 
-
 # Look at all traps (all events with trap level information)
 leaflet(data = bind_rows(dbee_location1, dbee_location2)) |>
   addProviderTiles("Esri.WorldImagery") |>
@@ -398,6 +397,9 @@ dbee_location2 <-
   ) |>
 
   mutate(coordinateUncertaintyInMeters = case_when(
+    # Feedback from partners indicated that TC-MONG trap location may be
+    # inaccurate. Assign greater GPS uncertainty.
+    fieldNumber == "TC-MONG" ~ 1001,
     is.na(uncertainty) ~ 31,
     uncertainty < 31 ~ 31,
     TRUE ~ round(uncertainty, 0)
@@ -592,7 +594,7 @@ Strathkellar_polygon <-
 
   # Need to account for uncertainty around points by adding buffer
   # Note the crs transform as coordinateUncertaintyInMeters is in m
-  st_transform(crs = st_crs("EPSG:7844")) %>%
+  st_transform(crs = st_crs("EPSG:7844")) |>
   # Buffer 100m around each trap location
   st_buffer(dist = 100) |>
 
@@ -616,9 +618,9 @@ Larnook_polygon <-
 
   # Need to account for uncertainty around points by adding buffer
   # Note the crs transform as coordinateUncertaintyInMeters is in m
-  st_transform(crs = st_crs("EPSG:7844")) %>%
-  # Buffer 2000m around each trap location
-  st_buffer(dist = 2000) |>
+  st_transform(crs = st_crs("EPSG:7844")) |>
+  # Buffer 1000m around each trap location
+  st_buffer(dist = 1000) |>
 
   # Summarise to convex hull
   summarise() |>
@@ -1009,3 +1011,59 @@ saveRDS(object = dbee_site,
 
 saveRDS(object = dbee_trap,
         file = "data-raw/dbee_trap.rds")
+
+
+
+# Session info ------------------------------------------------------------
+
+sessionInfo()
+
+# R version 4.3.1 (2023-06-16 ucrt)
+# Platform: x86_64-w64-mingw32/x64 (64-bit)
+# Running under: Windows 11 x64 (build 22621)
+#
+# Matrix products: default
+#
+#
+# locale:
+# [1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8
+# [3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C
+# [5] LC_TIME=English_Australia.utf8
+#
+# time zone: Australia/Perth
+# tzcode source: internal
+#
+# attached base packages:
+# [1] stats     graphics  grDevices utils     datasets  methods   base
+#
+# other attached packages:
+# [1] sf_1.0-14             plotly_4.10.2         leaflet_2.2.0
+# [4] dwcPrepare_0.0.0.9000 lubridate_1.9.2       forcats_1.0.0
+# [7] stringr_1.5.0         dplyr_1.1.2           purrr_1.0.2
+# [10] readr_2.1.4           tidyr_1.3.0           tibble_3.2.1
+# [13] ggplot2_3.4.3         tidyverse_2.0.0
+#
+# loaded via a namespace (and not attached):
+# [1] gtable_0.3.4             htmlwidgets_1.6.2        lattice_0.21-8
+# [4] tzdb_0.4.0               leaflet.providers_1.13.0 vctrs_0.6.3
+# [7] tools_4.3.1              crosstalk_1.2.0          generics_0.1.3
+# [10] parallel_4.3.1           proxy_0.4-27             fansi_1.0.4
+# [13] pkgconfig_2.0.3          Matrix_1.5-4.1           KernSmooth_2.23-21
+# [16] data.table_1.14.8        RColorBrewer_1.1-3       lifecycle_1.0.3
+# [19] farver_2.1.1             compiler_4.3.1           munsell_0.5.0
+# [22] htmltools_0.5.6          usethis_2.2.2            class_7.3-22
+# [25] yaml_2.3.7               lazyeval_0.2.2           jquerylib_0.1.4
+# [28] pillar_1.9.0             crayon_1.5.2             ellipsis_0.3.2
+# [31] classInt_0.4-9           wk_0.8.0                 nlme_3.1-162
+# [34] tidyselect_1.2.0         digest_0.6.33            stringi_1.7.12
+# [37] labeling_0.4.3           splines_4.3.1            fastmap_1.1.1
+# [40] grid_4.3.1               colorspace_2.1-0         cli_3.6.1
+# [43] magrittr_2.0.3           utf8_1.2.3               e1071_1.7-13
+# [46] withr_2.5.0              scales_1.2.1             sp_2.0-0
+# [49] bit64_4.0.5              timechange_0.2.0         httr_1.4.7
+# [52] bit_4.0.5                hms_1.1.3                viridisLite_0.4.2
+# [55] mgcv_1.8-42              s2_1.1.4                 rlang_1.1.1
+# [58] Rcpp_1.0.11              glue_1.6.2               geosphere_1.5-18
+# [61] DBI_1.1.3                rstudioapi_0.15.0        vroom_1.6.3
+# [64] jsonlite_1.8.7           R6_2.5.1                 fs_1.6.3
+# [67] units_0.8-3

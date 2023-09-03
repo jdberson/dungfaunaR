@@ -609,3 +609,46 @@ saveRDS(object = dafwa_trap,
 
 saveRDS(object = dafwa_site,
         file = "data-raw/dafwa_site.rds")
+
+# Session info ------------------------------------------------------------
+
+sessionInfo()
+
+# R version 4.3.1 (2023-06-16 ucrt)
+# Platform: x86_64-w64-mingw32/x64 (64-bit)
+# Running under: Windows 11 x64 (build 22621)
+#
+# Matrix products: default
+#
+#
+# locale:
+# [1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8
+# [3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C
+# [5] LC_TIME=English_Australia.utf8
+#
+# time zone: Australia/Perth
+# tzcode source: internal
+#
+# attached base packages:
+# [1] stats     graphics  grDevices utils     datasets  methods   base
+#
+# other attached packages:
+# [1] sf_1.0-14             plotly_4.10.2         leaflet_2.2.0
+# [4] dwcPrepare_0.0.0.9000 lubridate_1.9.2       forcats_1.0.0
+# [7] stringr_1.5.0         dplyr_1.1.2           purrr_1.0.2
+# [10] readr_2.1.4           tidyr_1.3.0           tibble_3.2.1
+# [13] ggplot2_3.4.3         tidyverse_2.0.0
+#
+# loaded via a namespace (and not attached):
+# [1] utf8_1.2.3         generics_0.1.3     class_7.3-22       KernSmooth_2.23-21
+# [5] stringi_1.7.12     hms_1.1.3          digest_0.6.33      magrittr_2.0.3
+# [9] grid_4.3.1         timechange_0.2.0   fastmap_1.1.1      jsonlite_1.8.7
+# [13] e1071_1.7-13       DBI_1.1.3          httr_1.4.7         fansi_1.0.4
+# [17] crosstalk_1.2.0    viridisLite_0.4.2  scales_1.2.1       lazyeval_0.2.2
+# [21] cli_3.6.1          rlang_1.1.1        units_0.8-3        munsell_0.5.0
+# [25] withr_2.5.0        tools_4.3.1        tzdb_0.4.0         colorspace_2.1-0
+# [29] vctrs_0.6.3        R6_2.5.1           proxy_0.4-27       classInt_0.4-9
+# [33] lifecycle_1.0.3    fs_1.6.3           htmlwidgets_1.6.2  usethis_2.2.2
+# [37] pkgconfig_2.0.3    pillar_1.9.0       gtable_0.3.4       Rcpp_1.0.11
+# [41] glue_1.6.2         data.table_1.14.8  tidyselect_1.2.0   rstudioapi_0.15.0
+# [45] htmltools_0.5.6    compiler_4.3.1
