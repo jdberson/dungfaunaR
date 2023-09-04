@@ -184,8 +184,60 @@ htmlwidgets::saveWidget(season_plot,
 # Export the data ---------------------------------------------------------
 
 write.csv(occurrence_to_explore |>
-            filter(stateProvince != "Western Australia") |>
             group_by(locationID_site) |>
             slice_head(n = 23),
           file = str_c(dataset, "_data.csv"),
           row.names = FALSE)
+
+# Session info ------------------------------------------------------------
+
+sessionInfo()
+
+# R version 4.3.1 (2023-06-16 ucrt)
+# Platform: x86_64-w64-mingw32/x64 (64-bit)
+# Running under: Windows 11 x64 (build 22621)
+#
+# Matrix products: default
+#
+#
+# locale:
+# [1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8
+# [3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C
+# [5] LC_TIME=English_Australia.utf8
+#
+# time zone: Australia/Perth
+# tzcode source: internal
+#
+# attached base packages:
+# [1] stats     graphics  grDevices utils     datasets  methods   base
+#
+# other attached packages:
+# [1] plotly_4.10.2   leaflet_2.2.0   lubridate_1.9.2 forcats_1.0.0
+# [5] stringr_1.5.0   dplyr_1.1.2     purrr_1.0.2     readr_2.1.4
+# [9] tidyr_1.3.0     tibble_3.2.1    ggplot2_3.4.3   tidyverse_2.0.0
+#
+# loaded via a namespace (and not attached):
+# [1] gtable_0.3.4        htmlwidgets_1.6.2   devtools_2.4.5
+# [4] remotes_2.4.2.1     processx_3.8.2      lattice_0.21-8
+# [7] tzdb_0.4.0          callr_3.7.3         crosstalk_1.2.0
+# [10] vctrs_0.6.3         tools_4.3.1         ps_1.7.5
+# [13] generics_0.1.3      proxy_0.4-27        fansi_1.0.4
+# [16] pkgconfig_2.0.3     KernSmooth_2.23-21  data.table_1.14.8
+# [19] lifecycle_1.0.3     compiler_4.3.1      munsell_0.5.0
+# [22] httpuv_1.6.11       htmltools_0.5.6     usethis_2.2.2
+# [25] class_7.3-22        lazyeval_0.2.2      later_1.3.1
+# [28] pillar_1.9.0        crayon_1.5.2        urlchecker_1.0.1
+# [31] ellipsis_0.3.2      classInt_0.4-9      cachem_1.0.8
+# [34] sessioninfo_1.2.2   mime_0.12           tidyselect_1.2.0
+# [37] digest_0.6.33       stringi_1.7.12      sf_1.0-14
+# [40] fastmap_1.1.1       rnaturalearth_0.3.4 grid_4.3.1
+# [43] colorspace_2.1-0    cli_3.6.1           magrittr_2.0.3
+# [46] pkgbuild_1.4.2      utf8_1.2.3          e1071_1.7-13
+# [49] withr_2.5.0         scales_1.2.1        prettyunits_1.1.1
+# [52] promises_1.2.1      sp_2.0-0            timechange_0.2.0
+# [55] httr_1.4.7          hms_1.1.3           memoise_2.0.1
+# [58] shiny_1.7.5         viridisLite_0.4.2   miniUI_0.1.1.1
+# [61] profvis_0.3.8       rlang_1.1.1         Rcpp_1.0.11
+# [64] xtable_1.8-4        glue_1.6.2          DBI_1.1.3
+# [67] pkgload_1.3.2.1     rstudioapi_0.15.0   jsonlite_1.8.7
+# [70] R6_2.5.1            fs_1.6.3            units_0.8-3

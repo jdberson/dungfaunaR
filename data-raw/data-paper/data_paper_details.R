@@ -40,7 +40,7 @@ dungfauna_event_updated <-
 # Set ggplot theme
 theme_set(theme_bw())
 theme_update(
-  #strip.text = element_text(face="italic", size=9, hjust=0),
+  strip.text = element_text(size=12),
   strip.background = element_blank(),
   panel.border = element_rect(colour="black", fill=NA),
   legend.position="none",
@@ -437,9 +437,12 @@ left_join(
 
     trap_distances |>
       group_by(datasetName) |>
+      # Note we need to summarise while excluding 0 values due to some QLD
+      # sites having traps with the same coordinates
+      mutate(distance = as.numeric(distance)) |>
       summarise(
-        dist_mean = round(mean(distance), 0),
-        dist_min = round(min(distance), 0),
+        dist_mean = round(mean(distance[distance > 0]), 0),
+        dist_min = round(min(distance[distance > 0]), 0),
         dist_max = round(max(distance), 0)
       ) |>
 
@@ -485,7 +488,8 @@ dungfauna_event |>
 
   ) |>
   dplyr::select(-c(mean_period, min_period, max_period, mean_visits, min_visits, max_visits))
-)
+) |>
+  select(-`Total No. sites`)
 
 table_1_updated
 
@@ -565,13 +569,13 @@ fig2c <- ggplot(data = fig_2_data |>
 
 fig2a / fig2b / fig2c
 
-# ggsave(
-#   "data-raw/data-paper/paper_figure_2.png",
-#   width = 18,
-#   height = 20,
-#   units = "cm",
-#   dpi = 600
-# )
+ggsave(
+  "data-raw/data-paper/paper_figure_2.png",
+  width = 18,
+  height = 20,
+  units = "cm",
+  dpi = 600
+)
 
 # Caption info
 fig_2_data |>
@@ -777,7 +781,7 @@ dungfauna_occurrence |>
       scientificName == "Bubas bison" ~ "France and Spain",
       scientificName == "Copris elphenor" ~ "Southern Africa",
       scientificName == "Copris hispanus" ~ "Spain",
-      scientificName == "Digitonthophagus gazella" ~ "Africa (via Hawaii) and South Africa",
+      scientificName == "Digitonthophagus gazella" ~ "Zimbabwe (via Hawaii) and South Africa",
       scientificName == "Euoniticellus africanus" ~ "South Africa",
       scientificName == "Euoniticellus fulvus" ~ "France and Turkey",
       scientificName == "Euoniticellus intermedius" ~ "South Africa",
@@ -924,3 +928,70 @@ dungfauna_occurrence |>
   filter(is.na(day)) |>
   summarise(eventID[1])
 
+# Session info ------------------------------------------------------------
+
+sessionInfo()
+
+# R version 4.3.1 (2023-06-16 ucrt)
+# Platform: x86_64-w64-mingw32/x64 (64-bit)
+# Running under: Windows 11 x64 (build 22621)
+#
+# Matrix products: default
+#
+#
+# locale:
+# [1] LC_COLLATE=English_Australia.utf8  LC_CTYPE=English_Australia.utf8
+# [3] LC_MONETARY=English_Australia.utf8 LC_NUMERIC=C
+# [5] LC_TIME=English_Australia.utf8
+#
+# time zone: Australia/Perth
+# tzcode source: internal
+#
+# attached base packages:
+# [1] stats     graphics  grDevices utils     datasets  methods   base
+#
+# other attached packages:
+# [1] patchwork_1.1.3       ggspatial_1.1.9       plotly_4.10.2
+# [4] leaflet_2.2.0         sf_1.0-14             lubridate_1.9.2
+# [7] forcats_1.0.0         stringr_1.5.0         dplyr_1.1.2
+# [10] purrr_1.0.2           readr_2.1.4           tidyr_1.3.0
+# [13] tibble_3.2.1          ggplot2_3.4.3         tidyverse_2.0.0
+# [16] dungfaunaR_0.0.0.9000
+#
+# loaded via a namespace (and not attached):
+# [1] DBI_1.1.3                s2_1.1.4                 remotes_2.4.2.1
+# [4] rlang_1.1.1              magrittr_2.0.3           leaflet.extras_1.0.0
+# [7] e1071_1.7-13             compiler_4.3.1           systemfonts_1.0.4
+# [10] png_0.1-8                callr_3.7.3              vctrs_0.6.3
+# [13] quadprog_1.5-8           profvis_0.3.8            wk_0.8.0
+# [16] pkgconfig_2.0.3          crayon_1.5.2             fastmap_1.1.1
+# [19] ellipsis_0.3.2           labeling_0.4.3           lwgeom_0.2-13
+# [22] leafem_0.2.0             utf8_1.2.3               promises_1.2.1
+# [25] sessioninfo_1.2.2        tzdb_0.4.0               ps_1.7.5
+# [28] ragg_1.2.5               bit_4.0.5                rnaturalearthhires_0.2.1
+# [31] cachem_1.0.8             jsonlite_1.8.7           later_1.3.1
+# [34] terra_1.7-39             parallel_4.3.1           prettyunits_1.1.1
+# [37] R6_2.5.1                 bslib_0.5.1              stringi_1.7.12
+# [40] RColorBrewer_1.1-3       pkgload_1.3.2.1          jquerylib_0.1.4
+# [43] stars_0.6-3              Rcpp_1.0.11              usethis_2.2.2
+# [46] base64enc_0.1-3          directlabels_2023.8.25   httpuv_1.6.11
+# [49] timechange_0.2.0         tidyselect_1.2.0         rnaturalearth_0.3.4
+# [52] rstudioapi_0.15.0        abind_1.4-5              ggtext_0.1.2
+# [55] codetools_0.2-19         miniUI_0.1.1.1           curl_5.0.2
+# [58] processx_3.8.2           pkgbuild_1.4.2           lattice_0.21-8
+# [61] shiny_1.7.5              withr_2.5.0              shinyalert_3.0.0
+# [64] desc_1.4.2               units_0.8-3              proxy_0.4-27
+# [67] urlchecker_1.0.1         xml2_1.3.5               pillar_1.9.0
+# [70] KernSmooth_2.23-21       shinyjs_2.1.0            generics_0.1.3
+# [73] vroom_1.6.3              rprojroot_2.0.3          sp_2.0-0
+# [76] hms_1.1.3                munsell_0.5.0            scales_1.2.1
+# [79] xtable_1.8-4             class_7.3-22             glue_1.6.2
+# [82] lazyeval_0.2.2           tools_4.3.1              data.table_1.14.8
+# [85] fs_1.6.3                 grid_4.3.1               crosstalk_1.2.0
+# [88] devtools_2.4.5           colorspace_2.1-0         raster_3.6-23
+# [91] cli_3.6.1                textshaping_0.3.6        fansi_1.0.4
+# [94] viridisLite_0.4.2        gtable_0.3.4             sass_0.4.7
+# [97] digest_0.6.33            classInt_0.4-9           farver_2.1.1
+# [100] htmlwidgets_1.6.2        memoise_2.0.1            htmltools_0.5.6
+# [103] lifecycle_1.0.3          httr_1.4.7               shinyWidgets_0.8.0
+# [106] mime_0.12                bit64_4.0.5              gridtext_0.1.5
