@@ -11,7 +11,8 @@
 #' # start the visualisation with:
 #' # dungfaunaR::runShinyApp()
 runShinyApp <- function() {
-  appDir <- system.file("shiny-visualisation", "app", package = "dungfaunaR")
+  appDir <-
+    base::system.file("shiny-visualisation", "app", package = "dungfaunaR")
 
   if (appDir == "") {
     stop("Could not find shiny app directory. Try re-installing `dungfaunaR`.",

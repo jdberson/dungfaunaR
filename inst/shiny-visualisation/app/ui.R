@@ -69,7 +69,7 @@ menu_items <-
           inputId = "prediction_species",
           label = "Select a species",
           choices = species_choices,
-          options = pickerOptions(size = 5),
+          options = shinyWidgets::pickerOptions(size = 5),
           choicesOpt = list(content = c(
             base::paste0(
               "<div style='display:inline-block;vertical-align:middle;'><p style='display:inline-block;margin-left:2px;margin-top:10px;margin-bottom:10px;top:50%'>",
@@ -138,7 +138,7 @@ data_menu_inputs <- function() {
     shinyWidgets::pickerInput(
       inputId = "species",
       label = "Select a species",
-      options = pickerOptions(size = 5),
+      options = shinyWidgets::pickerOptions(size = 5),
       choices = species_choices,
       choicesOpt = list(content = c(
         base::paste0(
@@ -285,7 +285,7 @@ collections_tab <- shiny::tabPanel(
       width = '60%',
       height = 'auto',
       align = 'center',
-      sliderTextInput(
+      shinyWidgets::sliderTextInput(
         inputId = "monthrange",
         label = "",
         choices = month.name,

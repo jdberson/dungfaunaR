@@ -24,14 +24,14 @@ datadata <- datadata[base::order(datadata$abundance_total, decreasing=TRUE),]
 leaflet_base_map <-
   leaflet::leaflet(
     options =
-      leafletOptions(zoomControl = TRUE,
+      leaflet::leafletOptions(zoomControl = TRUE,
                      zoomSnap = 0.05,
                      zoomDelta = 12,
                      maxZoom=12,
                      minZoom=3)
     )|>
   # addTiles() |>
-  leaflet::addProviderTiles(providers$CartoDB.Positron) |>
+  leaflet::addProviderTiles(leaflet::providers$CartoDB.Positron) |>
   leaflet::setView(lng = 139.94, lat = -29.82, zoom = 5) |>
   leaflet::setMaxBounds(91, -65,  197, 5)
 
@@ -286,7 +286,7 @@ function(input, output, session) {
     cols = 'black'
 
     # change date to one year, so plot only displays one years worth of data
-    dat$year <- base::as.character(year(dat$date))
+    dat$year <- base::as.character(lubridate::year(dat$date))
     lubridate::year(dat$date) <- 1900
     dat$date <- base::as.Date(dat$date)
 
@@ -394,12 +394,12 @@ function(input, output, session) {
 
     d <- dataSummarised()
 
-    # d <- d %>% arrange(!!sym(colorBy)) %>%
+    # d <- d |> arrange(!!sym(colorBy)) |>
     #   filter(!!sym(colorBy)!=0)
     d[d[, colorBy] == 0, colorBy] <- NA
 
     if (base::nrow(d) == 0) {
-      leaflet::leafletProxy("map") %>%
+      leaflet::leafletProxy("map") |>
         leaflet::clearMarkers()
       return(NULL)
     }
@@ -417,7 +417,7 @@ function(input, output, session) {
           )
     } else {
       pal <-
-        colorNumeric(
+        leaflet::colorNumeric(
           colorpalette,
           colorData,
           7,
@@ -441,7 +441,7 @@ function(input, output, session) {
     opacity <- base::ifelse(base::is.na(d[,colorBy]), 0, 1)
 
     leaflet::leafletProxy("map", data = d) |>
-      leaflet::clearMarkers() %>%
+      leaflet::clearMarkers() |>
       leaflet::addCircleMarkers(
         ~longitude,
         ~latitude,
@@ -452,7 +452,7 @@ function(input, output, session) {
         weight = 1,
         fillOpacity = opacity,
         fillColor = pal(colorData)) |>
-      addLegend(
+      leaflet::addLegend(
         "bottomleft",
         pal = pal,
         opacity = opacity,
@@ -576,12 +576,12 @@ function(input, output, session) {
       r <- get_selected_prediction()
     })
 
-    pos <- sf::st_point(base::cbind(click$lng, click$lat)) %>%
-      sf::st_sfc() %>%
-      sf::st_set_crs(4326) %>%
+    pos <- sf::st_point(base::cbind(click$lng, click$lat)) |>
+      sf::st_sfc() |>
+      sf::st_set_crs(4326) |>
       sf::st_transform(sf::st_crs(r))
 
-    value <- stringr::st_extract(get_selected_prediction(), pos) %>%
+    value <- stringr::st_extract(get_selected_prediction(), pos) |>
       sf::st_drop_geometry()
 
     proxy <- leaflet::leafletProxy("prediction_map")
@@ -678,9 +678,9 @@ function(input, output, session) {
 
   shiny::observe({
     sites <- if (base::is.null(input$states)) base::character(0) else {
-      dplyr::filter(dungfauna_occurrence, stateProvince %in% input$states) %>%
-        `$`('locationID_site') %>%
-        base::unique() %>%
+      dplyr::filter(dungfauna_occurrence, stateProvince %in% input$states) |>
+        {`$`('locationID_site')}() |>
+        base::unique() |>
         base::sort()
     }
     stillSelected <- shiny::isolate(input$sites[input$sites %in% sites])
