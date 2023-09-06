@@ -1,31 +1,31 @@
-library(leaflet)
-library(shinyWidgets)
-library(stringr)
-library(shinyalert)
+# library(leaflet)
+# library(shinyWidgets)
+# library(stringr)
+# library(shinyalert)
 
 # Choices for drop-downs
 vars_preds <- c("Biomass" = "biomass")
 vars <- c("Average number of beetles trapped" = "abundance",
           "Average biomass of beetles trapped (g dry mass)" = "biomass")
 
-species_images <- vector()
-for (i in 1:length(species_choices)) {
+species_images <- base::vector()
+for (i in 1:base::length(species_choices)) {
   if (species_choices[i] == 'total') {
     species_images[i] = ''
   } else {
-    species_images[i] <- paste0('beetle_images/',
-                                str_replace(species_choices[i], ' ', '_'),
+    species_images[i] <- base::paste0('beetle_images/',
+                                stringr::str_replace(species_choices[i], ' ', '_'),
                                 '.jpg')
   }
 }
 
 
 year_choices <-
-  sort(unique(format(as.Date(alldatas$date), format = "%Y")))
+  base::sort(base::unique(base::format(base::as.Date(alldatas$date), format = "%Y")))
 
 menu_items <-
-  div(
-    absolutePanel(
+  htmltools::div(
+    shiny::absolutePanel(
       id = "controls",
       class = "panel panel-default",
       fixed = TRUE,
@@ -37,7 +37,7 @@ menu_items <-
       width = "auto",
       height = "auto",
 
-      div(
+      htmltools::div(
         align = 'center',
         actionButton('showMainPanel', '▼', class = 'mainPanelButton'),
         shinyjs::hidden(div(
@@ -45,11 +45,11 @@ menu_items <-
           actionButton('hideMainPanel', '▲', class = 'mainPanelButton')
         ))
       ),
-      div(
+      htmltools::div(
         id = "mainPanel",
 
 
-        div(
+        htmltools::div(
           h6(
             class = 'd-lg-none d-inline-align-middle',
             "Click the above arrow to view the map",
@@ -58,31 +58,31 @@ menu_items <-
           h4("Select a measure and species to predict over the year", align = 'center')
         ),
 
-        selectInput(
+        shiny::selectInput(
           "prediction_color",
           "Select a measure",
           vars_preds,
           selected = 'Biomass',
           width = '100%'
         ),
-        pickerInput(
+        shinyWidgets::pickerInput(
           inputId = "prediction_species",
           label = "Select a species",
           choices = species_choices,
           options = pickerOptions(size = 5),
           choicesOpt = list(content = c(
-            paste0(
+            base::paste0(
               "<div style='display:inline-block;vertical-align:middle;'><p style='display:inline-block;margin-left:2px;margin-top:10px;margin-bottom:10px;top:50%'>",
-              names(species_choices)[1],
+              base::names(species_choices)[1],
               "</p> <img src='",
               species_images[1],
               "' width=70 style='display:float'/></div>"
             ),
-            paste0(
+            base::paste0(
               "<div style='display:inline-block;vertical-align:middle;'><p style='display:inline-block;margin:0;top:50%;'><i>",
-              names(species_choices)[2:length(species_choices)],
+              base::names(species_choices)[2:base::length(species_choices)],
               "</i></p> <img src='",
-              species_images[2:length(species_images)],
+              species_images[2:base::length(species_images)],
               "' width=70 style='display:float'/></div>"
             )
           )),
@@ -92,7 +92,8 @@ menu_items <-
     )
   )
 
-year_selection_panel <- absolutePanel(
+year_selection_panel <-
+  shiny::absolutePanel(
   id = 'year_selection_panel',
   fixed = TRUE,
   draggable = FALSE,
@@ -100,7 +101,7 @@ year_selection_panel <- absolutePanel(
   height = 'auto',
   align = 'center',
 
-  sliderTextInput(
+  shinyWidgets::sliderTextInput(
     inputId = "prediction_monthrange",
     label = "",
     choices = month.name.custom,
@@ -118,7 +119,7 @@ year_selection_panel <- absolutePanel(
 
 
 data_menu_inputs <- function() {
-  return(div(
+  return(htmltools::div(
     # selectInput(
     #   "color",
     #   "Select a measure",
@@ -126,7 +127,7 @@ data_menu_inputs <- function() {
     #   selected = 'Average number of beetles trapped',
     #   width = '100%'
     # ),
-    selectInput(
+    shiny::selectInput(
       "datasetName",
       "Select a data set",
       dataset_sources,
@@ -134,30 +135,30 @@ data_menu_inputs <- function() {
       width = '100%'
     ),
     # selectInput("species", "Select a species", species_choices, selected='total', width='100%'),
-    pickerInput(
+    shinyWidgets::pickerInput(
       inputId = "species",
       label = "Select a species",
       options = pickerOptions(size = 5),
       choices = species_choices,
       choicesOpt = list(content = c(
-        paste0(
+        base::paste0(
           "<div style='display:inline-block;vertical-align:middle;'><p style='display:inline-block;margin-left:2px;margin-top:10px;margin-bottom:10px;top:50%'>",
-          names(species_choices)[1],
+          base::names(species_choices)[1],
           "</p> <img src='",
           species_images[1],
           "' width=70 style='display:float'/></div>"
         ),
-        paste0(
+        base::paste0(
           "<div style='display:inline-block;vertical-align:middle;'><p style='display:inline-block;margin:0;top:50%;'><i>",
-          names(species_choices)[2:length(species_choices)],
+          base::names(species_choices)[2:base::length(species_choices)],
           "</i></p> <img src='",
-          species_images[2:length(species_images)],
+          species_images[2:base::length(species_images)],
           "' width=70 style='display:float'/></div>"
         )
       )),
       width = '100%'
     ),
-    pickerInput(
+    shinyWidgets::pickerInput(
       inputId = "daterange",
       label = "Select years",
       choices = year_choices,
@@ -173,9 +174,10 @@ data_menu_inputs <- function() {
   ))
 }
 
-data_menu_items <- div(
+data_menu_items <-
+  htmltools::div(
   # wide view
-  absolutePanel(
+  shiny::absolutePanel(
     id = "controls",
     class = "panel panel-default",
     fixed = TRUE,
@@ -185,45 +187,45 @@ data_menu_items <- div(
     width = '30%',
     height = "auto",
 
-    div(
+    htmltools::div(
       align = 'center',
-      actionButton('showSidebar', '▼', class = 'sidebarButton'),
+      shiny::actionButton('showSidebar', '▼', class = 'sidebarButton'),
       shinyjs::hidden(div(
         id = 'hideSidebar',
-        actionButton('hideSidebar', '▲', class = 'sidebarButton')
+        shiny::actionButton('hideSidebar', '▲', class = 'sidebarButton')
       ))
     ),
 
-    div(
+    htmltools::div(
       id = 'sidebar',
-      div(
-        h6(
+      htmltools::div(
+        htmltools::h6(
           class = 'd-lg-none d-inline-align-middle',
           "Click the above arrow to view the map",
           align = 'center'
         ),
-        h4("Filter by data set, species and year", align = 'center')
+        htmltools::h4("Filter by data set, species and year", align = 'center')
       ),
       data_menu_inputs(),
 
       # plotOutput("histAbundance", height = 200),
-      div(
+      htmltools::div(
         class = 'd-lg-block d-none',
-        h4("Average catch in a trap in map area", align = 'center'),
-        plotOutput("scatterSelected", height = 300)
+        htmltools::h4("Average catch in a trap in map area", align = 'center'),
+        shiny::plotOutput("scatterSelected", height = 300)
       )
     )
   )
 )
 
 
-loading_screen <- div(
+loading_screen <- htmltools::div(
   id='loading_screen',
-  div(
-    HTML('<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'),
-    style='margin-top: 20%; margin-bottom: auto; text-align: center;'
+  htmltools::div(
+    htmltools::HTML('<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'),
+    style = 'margin-top: 20%; margin-bottom: auto; text-align: center;'
   ),
-  style='
+  style = '
     position: fixed; /* Stay in place */
     z-index: 1000; /* Sit on top */
     padding-top: 100px; /* Location of the box */
@@ -237,14 +239,14 @@ loading_screen <- div(
 )
 
 if (include_predictions) {
-  predictions_tab <- tabPanel(
+  predictions_tab <- shiny::tabPanel(
     "Prediction",
-    verticalLayout(
-      chooseSliderSkin("HTML5", color = 'blue'),
-      div(
+    shiny::verticalLayout(
+      shinyWidgets::chooseSliderSkin("HTML5", color = 'blue'),
+      htmltools::div(
         class = "outer",
         # If not using custom CSS, set height of leafletOutput to a number instead of percent
-        leafletOutput("prediction_map", width = "100%", height = "100%"),
+        leaflet::leafletOutput("prediction_map", width = "100%", height = "100%"),
 
         year_selection_panel,
 
@@ -261,18 +263,18 @@ if (include_predictions) {
 } else {
   predictions_tab <- NULL
 }
-collections_tab <- tabPanel(
+collections_tab <- shiny::tabPanel(
   "Collection",
-  div(
+  htmltools::div(
     class = "outer",
 
     tags$head(# Include our custom CSS
-      includeCSS("styles.css"),
-      includeScript("gomap.js")),
+      htmltools::includeCSS("styles.css"),
+      htmltools::includeScript("gomap.js")),
 
     # If not using custom CSS, set height of leafletOutput to a number instead of percent
-    leafletOutput("map", width = "100%", height = "100%"),
-    absolutePanel(
+    leaflet::leafletOutput("map", width = "100%", height = "100%"),
+    shiny::absolutePanel(
       id = 'data_year_selection_panel',
       fixed = TRUE,
       draggable = FALSE,
@@ -298,66 +300,66 @@ collections_tab <- tabPanel(
   )
 )
 if (include_data_table) {
-  data_table_tab <- tabPanel(
+  data_table_tab <- shiny::tabPanel(
     "Data",
-    fluidRow(column(
+    shiny::fluidRow(shiny::column(
       3,
-      selectInput(
+      shiny::selectInput(
         "states",
         "States",
         c(
           "All states" = "",
-          structure(unique(alldatas$state), names = unique(alldatas$state))
+          base::structure(base::unique(alldatas$state), names = base::unique(alldatas$state))
         ),
         multiple = TRUE
       )
     ),
-    column(
+    shiny::column(
       3,
-      conditionalPanel(
+      shiny::conditionalPanel(
         "input.states",
-        selectInput("sites", "Sites", c("All sites" = ""), multiple =
+        shiny::selectInput("sites", "Sites", c("All sites" = ""), multiple =
                       TRUE)
       )
     )),
-    fluidRow(column(
+    shiny::fluidRow(shiny::column(
       1,
-      numericInput(
+      shiny::numericInput(
         "minTotalAbundance",
         "Min abundance",
         min = 0,
         value = 0
       )
     ),
-    column(
+    shiny::column(
       1,
-      numericInput(
+      shiny::numericInput(
         "maxTotalAbundance",
         "Max abundance",
         min = 0,
         value = 1000000
       )
     ),
-    column(
+    shiny::column(
       3,
-      selectInput(
+      shiny::selectInput(
         "speciesTable",
         "Species",
         c(
           "All species" = "",
-          structure(species, names = names(species))
+          base::structure(species, names = base::names(species))
         ),
         multiple = TRUE
       )
     )),
-    hr(),
+    htmltools::hr(),
     DT::dataTableOutput("datatable")
   )
 } else {
   data_table_tab <- NULL
 }
 
-main <- navbarPage(
+main <- shiny::navbarPage(
     id = "nav",
     collapsible = TRUE,
     theme = bslib::bs_theme(version = 5, bootswatch = 'zephyr'),
@@ -365,11 +367,11 @@ main <- navbarPage(
     collections_tab,
     predictions_tab,
     data_table_tab,
-    conditionalPanel("false", icon("crosshair"))
+    shiny::conditionalPanel("false", icon("crosshair"))
   )
 
 
-div(
+htmltools::div(
   loading_screen,
   main
 )

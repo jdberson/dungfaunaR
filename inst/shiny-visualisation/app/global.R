@@ -1,7 +1,7 @@
-library(dplyr)
-library(sf)
-library(lubridate)
-library(stars)
+# library(dplyr)
+# library(sf)
+# library(lubridate)
+# library(stars)
 
 # load the data table and format it for the dashboard
 table <-
@@ -9,7 +9,9 @@ table <-
 
   dplyr::mutate(
     date = lubridate::as_date(eventDate_setup),
-    trap = dplyr::if_else(base::is.na(locationID_trap), locationID_site, locationID_trap)
+    trap = dplyr::if_else(base::is.na(locationID_trap),
+                          locationID_site,
+                          locationID_trap)
     ) |>
 
   dplyr::select(
@@ -40,8 +42,8 @@ table <-
   ))
 
 dungfauna_occurrence <- dungfauna_occurrence |>
-  mutate(
-    datacode = paste0(locationID_site, '_', stateProvince)
+  dplyr::mutate(
+    datacode = base::paste0(locationID_site, '_', stateProvince)
   )
 
 alldatas <-
@@ -67,16 +69,17 @@ include_data_table <- TRUE
 
 
 
-foo <- alldatas[ , grepl( "abundance" , names( alldatas ))]
-original_names <- colnames(foo)
-foo <- subset(foo, select=-abundance_total)
-species <- gsub("abundance_", "", colnames(foo))
-names(species) <- species
+foo <- alldatas[ , base::grepl( "abundance" , base::names( alldatas ))]
+original_names <- base::colnames(foo)
+foo <- base::subset(foo, select = -abundance_total)
+species <- base::gsub("abundance_", "", base::colnames(foo))
+base::names(species) <- species
 species_choices <- species
 species_choices <- c('All'='total', species)
 
-cleantable <- alldatas %>%
-  select(
+cleantable <-
+  alldatas |>
+  dplyr::select(
     Site = site,
     State = state,
     datacode = datacode,
@@ -90,7 +93,7 @@ cleantable <- alldatas %>%
 
 dataset_sources <- c(
   'All',
-  unique(cleantable$datasetName)
+  base::unique(cleantable$datasetName)
 )
 
 # get predicted_data_sf
@@ -112,18 +115,18 @@ dataset_sources <- c(
 # r_stack <- stars::read_stars('./data/predictions_for_dashboard.nc')
 # names(r_stack) <- 1:12
 
-if (!file.exists('./data/month_name_custom.rds')) {
+if (!base::file.exists('./data/month_name_custom.rds')) {
   stop('create ./data/month_name_custom.rds by running server.R!')
 } else {
-  month.name.custom <- readRDS('./data/month_name_custom.rds')
+  month.name.custom <- base::readRDS('./data/month_name_custom.rds')
 }
 
 # Clear the objects created while running the shiny app
 # Note that we are not clearing the dungfauna_occurrence object as this
 # may have been loaded prior to loading the app - not sure if this is the
 # best practice
-onStop(function() {
-  rm(list = c("alldatas", "cleantable", "foo", "table", "dataset_sources",
+shiny::onStop(function() {
+  base::rm(list = c("alldatas", "cleantable", "foo", "table", "dataset_sources",
               "include_data_table", "include_predictions", "month.name.custom",
               "original_names", "species", "species_choices"),
      envir = .GlobalEnv)
