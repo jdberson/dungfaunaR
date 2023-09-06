@@ -130,4 +130,5 @@ shiny::onStop(function() {
               "include_data_table", "include_predictions", "month.name.custom",
               "original_names", "species", "species_choices"),
      envir = .GlobalEnv)
+  detach("package:shiny", unload = FALSE) # Gives an error if TRUE
 })
