@@ -4,10 +4,6 @@
 # Here we combine data from multiple projects to form a single dataset with
 # imported dung beetles to Australia
 
-# Over time we will update this dataset to include additional data where they
-# become available, including data from other projects, and additional species
-# (eg native dung beetles).
-
 # The data are presented in both wide format (dungfauna_event) and long
 # format with each species in a sample listed on a separate row
 # (dungfauna_occurrence)
@@ -141,7 +137,100 @@ dafwa_2012_2014 |>
 # Change name in QLD project
 qld_2001_2010 <-
   qld_2001_2010 |>
-  mutate(locationID_site = str_replace(locationID_site, "Springdale", "Springdale_a"))
+  mutate(
+    locationID_site = str_replace(locationID_site, "Springdale", "Springdale_a")
+    )
+
+
+# Update names in site and trap shape files - may be useful
+dafwa_trap_updated <-
+  dafwa_trap |>
+  mutate(
+    locationID_site = str_replace(locationID_site, "Northcliffe", "Meerup.A"),
+    locationID_trap = str_replace(locationID_trap, "Northcliffe", "Meerup.A")
+  )
+
+dafwa_site_updated <-
+  dafwa_site |>
+  mutate(
+    locationID_site = str_replace(locationID_site, "Northcliffe", "Meerup.A")
+  )
+
+dbee_trap_updated <-
+  dbee_trap |>
+  mutate(
+    locationID_site = case_when(
+      locationID_site == "Williams" ~ "Williams.A",
+      locationID_site == "Jingalup" ~ "Jingalup.A",
+      TRUE ~ locationID_site
+    ),
+
+    locationID_trap = case_when(
+      locationID_site == "Williams" ~
+        str_replace(locationID_trap, "Williams", "Williams.A"),
+      locationID_site == "Jingalup" ~
+        str_replace(locationID_trap, "Jingalup.A", "Jingalup.A"),
+      TRUE ~ locationID_trap
+    )
+  )
+
+dbee_site_updated <-
+  dbee_site |>
+  mutate(
+    locationID_site = case_when(
+      locationID_site == "Williams" ~ "Williams.A",
+      locationID_site == "Jingalup" ~ "Jingalup.A",
+      TRUE ~ locationID_site
+    )
+  )
+
+qld_trap_updated <-
+  qld_trap |>
+  mutate(
+    locationID_site =
+      str_replace(locationID_site, "Springdale", "Springdale_a"),
+    locationID_trap =
+      str_replace(locationID_trap, "Springdale", "Springdale_a")
+  )
+
+qld_site_updated <-
+  qld_site |>
+  mutate(
+    locationID_site = str_replace(locationID_site, "Springdale", "Springdale_a")
+  )
+
+# Combine and save trap and site shape files - include datasetName in data
+all_projects_trap <-
+  bind_rows(
+    dbee_trap_updated |>
+      mutate(datasetName = "Dung Beetle Ecosystem Engineers"),
+
+    dafwa_trap_updated |>
+      mutate(datasetName = "South-Western Australian Dung Beetle Survey and Monitoring Project"),
+
+    qld_trap_updated |>
+      mutate(datasetName = "Queensland Dung Beetle Project")
+  ) |>
+  relocate(datasetName)
+
+all_projects_site <-
+  bind_rows(
+    dbee_site_updated |>
+      mutate(datasetName = "Dung Beetle Ecosystem Engineers"),
+
+    dafwa_site_updated |>
+      mutate(datasetName = "South-Western Australian Dung Beetle Survey and Monitoring Project"),
+
+    qld_site_updated |>
+      mutate(datasetName = "Queensland Dung Beetle Project")
+  ) |>
+  relocate(datasetName)
+
+saveRDS(object = all_projects_trap,
+        file = "data-raw/all_projects_trap.rds")
+
+saveRDS(object = all_projects_site,
+        file = "data-raw/all_projects_site.rds")
 
 
 # View sites
@@ -151,19 +240,19 @@ leaflet() |>
                    lng = ~decimalLongitude,
                    lat = ~decimalLatitude,
                    label = ~locationID_site, color = "lightblue") |>
-  addPolygons(data = dafwa_site,
+  addPolygons(data = dafwa_site_updated,
               label = ~locationID_site, color = "blue") |>
   addCircleMarkers(data = dbee_2019_2022,
                    lng = ~decimalLongitude,
                    lat = ~decimalLatitude,
                    label = ~locationID_site, color = "pink") |>
-  addPolygons(data = dbee_site,
+  addPolygons(data = dbee_site_updated,
               label = ~locationID_site, color = "red") |>
   addCircleMarkers(data = qld_2001_2010,
                    lng = ~decimalLongitude,
                    lat = ~decimalLatitude,
                    label = ~locationID_site, color = "lightyellow") |>
-  addPolygons(data = qld_site,
+  addPolygons(data = qld_site_updated,
               label = ~locationID_site, color = "yellow")
 
 
