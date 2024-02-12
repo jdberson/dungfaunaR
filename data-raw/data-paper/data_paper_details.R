@@ -1,13 +1,26 @@
-# To reload the data if starting from here --------------------------------
+# Code used for data paper ------------------------------------------------
 
-devtools::load_all()
+# Note: some parts of this code rely on files contained within the dungfaunaR
+# R project available at https://github.com/jdberson/dungfaunaR
+
+# Load data and packages --------------------------------------------------
+
+library(dungfaunaR)
 library(tidyverse)
 library(sf)
 library(leaflet)
-library(plotly)
 library(ggspatial)
 library(patchwork)
 
+library(geodata)
+library(terra)
+library(exactextractr)
+
+library(rgee)
+rgee::ee_Authenticate()
+rgee::ee_Initialize()
+
+# Trap sf objects
 dbee_trap <-
   readRDS("data-raw/dbee_trap.rds")
 
@@ -15,33 +28,56 @@ qld_trap <-
   readRDS("data-raw/qld_trap.rds")
 
 
-
 # Assign site type variable for use throughout ----------------------------
+
+# In the paper we classify sites as either 'Ad hoc sampling sites' or
+# 'Monitoring sites'. Ad hoc sampling sites are those where traps were deployed
+# once or twice, or where a non-trapping survey took place, the remaining sites
+# are Monitoring sites.
+
+# We also broadly classify sampling events into those where traps were deployed
+# vs where surveys were undertaken.
+
+# The following code assigns sites as either ad hoc or monitoring sites
+# (site_type) and sampling events as either trap or survey (survey_trap).
 
 dungfauna_event_updated <-
   dungfauna_event |>
   group_by(locationID_site) |>
-  mutate(n_visits = n_distinct(parentEventID),
-         site_type = case_when(
-           str_detect(samplingProtocol, "trap") & n_visits > 2 ~ "Monitoring sites",
-           TRUE ~ "Ad hoc sampling sites",
-         )) |>
+  mutate(
+    n_visits = n_distinct(parentEventID),
+    site_type = case_when(
+      str_detect(samplingProtocol, "trap") & n_visits > 2 ~ "Monitoring sites",
+      TRUE ~ "Ad hoc sampling sites",
+    ),
+    survey_trap = if_else(str_detect(samplingProtocol, "trap"),
+                          "trap", "survey")) |>
   # Two sites are both (i.e. were trapped and surveyed) - change to monitoring
   mutate(n_types = n_distinct(site_type)) |>
   mutate(site_type = if_else(n_types ==  2, "Monitoring sites", site_type)) |>
   mutate(n_types = n_distinct(site_type)) |>
   select(-n_types)
 
+# The following code calculates the mean coordinates for a site and transforms
+# this to an sf object. This can be useful for extracting environmental
+# variables for a site, as well as calculating the distances between sites.
+dungfauna_event_sites <-
+  dungfauna_event_updated |>
+  group_by(locationID_site) |>
+  summarise(decmalLongitude = mean(decimalLongitude),
+            decimalLatitude = mean(decimalLatitude)) |>
+  st_as_sf(coords = c("decmalLongitude", "decimalLatitude"),
+           crs = st_crs("EPSG:4326"),
+           remove = FALSE)
 
 
-
-# Figures and other information for data paper ----------------------------
+# Set plotting theme ------------------------------------------------------
 
 # Set ggplot theme
 theme_set(theme_bw())
 theme_update(
-  strip.text = element_text(size=12),
-  strip.background = element_blank(),
+  strip.text = element_text(size=10),
+  strip.background = element_rect(fill = NA),
   panel.border = element_rect(colour="black", fill=NA),
   legend.position="none",
   axis.text.y = element_text(size=10, colour="black"),
@@ -55,16 +91,10 @@ theme_update(
 
 # Information for abstract ------------------------------------------------
 
-# N presence records
+# N presence and records
 dungfauna_occurrence |>
-  filter(occurrenceStatus == "present") |>
-  count()
+  count(occurrenceStatus)
 # 22,718 presence records
-
-# N absence records
-dungfauna_occurrence |>
-  filter(occurrenceStatus == "absent") |>
-  count()
 # 213,538 absence records
 
 # N monitoring events
@@ -109,7 +139,7 @@ dungfauna_occurrence |>
   filter(occurrenceStatus == "present" & is.na(individualCount)) |>
   count() |> # 760
   pull()
-# 1752807 # DOES INCLUDE SURVEY BEETLES - USED IN ABSTRACT
+# 1,752,807 # INCLUDES SURVEY BEETLES - USED IN ABSTRACT
 
 
 # Class II A.3 ------------------------------------------------------------
@@ -121,9 +151,181 @@ dungfauna_occurrence |>
   arrange(year)
 
 
+# Class II B.1 ------------------------------------------------------------
+
+## Site descriptions
+
+# Here we use publicly available datasets to provide some descriptions of the
+# sites where dung beetle monitoring activities took place.
+
+# d. Geology, landform
+
+# We will use Google Earth Engine to extract the elevation data for each site
+
+dem_s <- ee$Image("AU/GA/DEM_1SEC/v10/DEM-S")
+
+elevation_data <-
+  dungfauna_event_sites %>%
+
+  # Extract elevation data
+  mutate(ee_extract(x = dem_s, y = ., scale = 5))
+
+# Summarise the elevation data
+elevation_data |>
+  st_drop_geometry() |>
+  summarise(mean(elevation), min(elevation), max(elevation))
+
+
+# f. Site history
+
+# Download land use data for Australia
+clum_path <- tempdir()
+clum_file_path <- str_c(clum_path, "geotiff_clum_50m1220m.zip", sep = "\\" )
+
+
+utils::download.file(
+  url = "https://www.agriculture.gov.au/sites/default/files/documents/geotiff_clum_50m1220m.zip",
+  destfile =  clum_file_path)
+utils::unzip(clum_file_path,
+             exdir=stringr::str_trim(tools::file_path_sans_ext(clum_file_path)))
+base::file.remove(clum_file_path)
+
+# Read in land use raster data
+clum <-
+  terra::rast(
+    paste0(clum_path,
+           "\\geotiff_clum_50m1220m\\geotiff_clum_50m1220m\\clum_50m1220m.tif")
+  )
+
+# Read in the data that assigns codes in the raster file to land uses
+info <-
+  st_read(
+    paste0(clum_path,
+           "\\geotiff_clum_50m1220m\\geotiff_clum_50m1220m\\clum_50m1220m.tif.vat.dbf")
+  )
+
+# Include a 5 km buffer around sites
+all_sites_buffer <-
+  dungfauna_event_sites |>
+  st_buffer(dist = units::set_units(5, "km"))
+
+# The following summarises the proportion of each land use within the 5 km
+# buffer zone around each site, and then assigns the land use with
+# the highest proportion to each site
+all_sites_landuse <-
+
+  bind_cols(
+    dungfauna_event_sites,
+
+    # The following extracts the fraction of each land used for each site
+    exactextractr::exact_extract(x = clum,
+                                 y = st_transform(all_sites_buffer,
+                                                  crs = st_crs(clum)),
+                                 fun = "frac")|>
+
+      # The following code summarises the extracted land use to the CL18
+      # levels - see the info object for details.
+      mutate(id = 1:length(frac_111)) |>
+      relocate(id) |>
+      pivot_longer(
+        cols = !id,
+        names_to = "VALUE",
+        names_prefix = "frac_",
+        values_to = "frac") |>
+      left_join(
+        info |>
+          select(VALUE, AGRI_INDUS, CL18) |>
+          mutate(VALUE = as.character(VALUE)),
+        by = "VALUE"
+      ) |>
+      mutate(landuse = case_when(
+        CL18 %in% c("Grazing modified pastures",
+                    "Grazing native vegetation",
+                    "Dryland cropping") ~ CL18,
+        CL18 == "Irrigated pastures" ~ "Grazing modified pastures",
+        TRUE ~ "other_landuse"
+      )) |>
+      filter(landuse != "other_landuse") |>
+      group_by(id, landuse) |>
+      summarise(frac = sum(frac)) |>
+      slice_max(frac, with_ties = FALSE) |>
+      select(-id)
+  )
+
+
+# The following gives the proportion of sites for each land use
+all_sites_landuse |>
+  st_drop_geometry() |>
+  filter(frac != 0) |>
+  count(landuse) |>
+  mutate(prop = n / sum(n))
+
+# The following gives the proportion of sampling events for each land use
+left_join(
+  dungfauna_event_updated |>
+    ungroup(),
+  all_sites_landuse |>
+    st_drop_geometry() |>
+    select(locationID_site, landuse, frac),
+  by = c("locationID_site")
+) |>
+  filter(frac != 0) |>
+  count(landuse) |>
+  mutate(prop = n / sum(n))
+
+# g. Climate
+
+# Download worldclim data
+
+# Change tempdir() to whichever directory the data should be saved to
+wc_path <- tempdir()
+
+# Download the bioclim variables for Australia
+aus_bioclim <-
+  worldclim_country("Australia", var = "bio", path = wc_path)
+
+# Extract the data for each site
+all_sites_bioclim <-
+
+  dungfauna_event_sites %>%
+
+  # Extract the bioclim variables
+  terra::extract(aus_bioclim, .)
+
+# wc2.1_30s_bio_1 is the annual mean temperature
+# wc2.1_30s_bio_12 is the annual precipitation
+# See: https://www.worldclim.org/data/bioclim.html
+
+# Summarise the annual mean temperature and annual precipitation
+all_sites_bioclim |>
+  summarise(
+    across(c(wc2.1_30s_bio_1, wc2.1_30s_bio_12),
+           list(mean = mean, min = min, max = max))
+  )
+
+# Class II B.2 ------------------------------------------------------------
+
+
+# How often were ad hoc sampling events at a site undertaken
+dungfauna_event_updated |>
+  mutate(date = date(eventDate_setup)) |>
+  filter(site_type == "Ad hoc sampling sites" | survey_trap == "survey")  |>
+  group_by(datasetName, survey_trap, locationID_site) |>
+  summarise(
+    n_sampling_events = n(),
+    n_occasions = n_distinct(date)) |>
+  summarise(
+    sum(n_occasions),
+    min(n_occasions),
+    max(n_occasions)
+    ) |>
+  ungroup() |>
+  mutate(
+    #total_events = sum(`sum(n_sampling_events)`),
+    total_occasions = sum(`sum(n_occasions)`))
+
 
 # Class II B.2.b ----------------------------------------------------------
-
 
 # Number of traps per visit
 dungfauna_occurrence |>
@@ -146,44 +348,96 @@ dungfauna_event_updated |>
 # Load map of Australia
 aus_map <- rnaturalearth::ne_states(country="Australia", returnclass="sf")
 
+fig_1_data <-
+  dungfauna_event |>
+  group_by(datasetName, locationID_site) |>
 
-# Figure
+  # Assign ad hoc sites to those surveyed or trapped
+  mutate(
+    survey_trap = if_else(str_detect(samplingProtocol, "trap"),
+                          "trap", "survey")) |>
+  summarise(
+    decimalLongitude = mean(decimalLongitude),
+    decimalLatitude = mean(decimalLatitude),
+    n_visits = n_distinct(parentEventID),
+    survey_trap = survey_trap[1]) |>
+  arrange(n_visits) |>
+  mutate(
+    site_type = if_else(
+      n_visits < 3, "Ad hoc sampling sites", "Monitoring sites"
+    ),
+    survey_trap = if_else(
+      site_type == "Monitoring sites", "trap", survey_trap
+    ),
+    datasetName =
+      factor(if_else(
+        datasetName == "South-Western Australian Dung Beetle Survey and Monitoring Project",
+        "South-Western Australian Project",
+        datasetName),
+        levels = c("Queensland Dung Beetle Project",
+                   "South-Western Australian Project",
+                   "Dung Beetle Ecosystem Engineers"))
+  )
+
+# Updated figure following reviewer feedback:
 ggplot(aus_map) +
-  geom_sf() +
+  geom_sf(fill = "white") +
   coord_sf(xlim=c(112, 155), ylim=c(-43, -10)) +
+  geom_point(data = fig_1_data |>
+               ungroup() |>
+               select(decimalLongitude, decimalLatitude, survey_trap),
+             aes(x = decimalLongitude,
+                 y = decimalLatitude,
+                 shape = survey_trap),
+             size = 1, colour = "grey") +
   geom_point(
-    data =
-      dungfauna_event |>
-      group_by(locationID_site) |>
-      summarise(
-        decimalLongitude = mean(decimalLongitude),
-        decimalLatitude = mean(decimalLatitude),
-        n_visits = n_distinct(parentEventID)) |>
-      arrange(n_visits) |>
-      mutate(site_type = if_else(
-        n_visits < 3, "(a) Ad hoc sampling sites", "(b) Monitoring sites"
-      )),
-    aes(x=decimalLongitude , y=decimalLatitude, colour = n_visits), size = 0.2) +
+    data = fig_1_data,
+    aes(x = decimalLongitude ,
+        y = decimalLatitude,
+        colour = n_visits,
+        shape = survey_trap),
+    size = 1) +
   scale_colour_viridis_c(
-    limits = c(1, 33), na.value = "yellow",
-    begin = 0, end = 0.99, option = "plasma", alpha = 1) +
+    limits = c(1, 33),
+    begin = 0, end = 0.8, option = "plasma", alpha = 1) +
+  scale_shape_manual(values = c(3, 20)) +
+
+  geom_text(
+    data = tibble(
+      decimalLongitude = 112,
+      decimalLatitude = -12,
+      datasetName = factor(rep(c("Queensland Dung Beetle Project",
+                          "South-Western Australian Project",
+                          "Dung Beetle Ecosystem Engineers"), 2),
+                          levels = c("Queensland Dung Beetle Project",
+                                     "South-Western Australian Project",
+                                     "Dung Beetle Ecosystem Engineers")),
+      site_type = c(rep("Ad hoc sampling sites", 3), rep("Monitoring sites", 3)),
+      text = c("A", "C", "E", "B", "D", "F")
+    ),
+    aes(x = decimalLongitude, y = decimalLatitude, label = text), size = 6, family="serif") +
   ylab("Latitude") +
   xlab("Longitude") +
   ggtitle("") +
-  #annotation_scale(location = "bl", text_family = "serif") +
-  annotation_north_arrow(location = "br",
-                         width = unit(0.5, "cm"),
-                         height = unit(0.5, "cm"),
-                         style = north_arrow_orienteering(text_family = "serif", text_size = 6)) +
-  guides(colour = guide_colourbar(title = "No. site visits")) +
-  facet_wrap(~site_type, ncol = 2) +
-  theme(legend.position = "right")
-
+  annotation_north_arrow(
+    data = tibble(datasetName = factor("Dung Beetle Ecosystem Engineers"),
+                  site_type = "Monitoring sites"),
+    location = "br",
+    width = unit(0.5, "cm"),
+    height = unit(0.5, "cm"),
+    style = north_arrow_orienteering(text_family = "serif", text_size = 6)) +
+  guides(colour = guide_colourbar(title = "No. site visits",
+                                  title.position = "top"),
+         shape = guide_legend(title = "Sampling type",
+                              override.aes = list(size = 5),
+                              title.position = "top")) +
+  facet_grid(datasetName ~ site_type) +
+  theme(legend.position = "bottom")
 
 ggsave(
   "data-raw/data-paper/paper_figure_1.png",
   width = 18,
-  height = 9,
+  height = 23,
   units = "cm",
   dpi = 600
 )
@@ -487,7 +741,9 @@ dungfauna_event |>
            str_c(mean_visits, " (", min_visits, "-", max_visits, ")")
 
   ) |>
-  dplyr::select(-c(mean_period, min_period, max_period, mean_visits, min_visits, max_visits))
+  dplyr::select(
+    -c(mean_period, min_period, max_period, mean_visits, min_visits, max_visits)
+    )
 ) |>
   select(-`Total No. sites`)
 
@@ -518,56 +774,96 @@ dungfauna_event |>
 fig_2_data <-
   dungfauna_event |>
   group_by(locationID_site) |>
-  mutate(n_visits = n_distinct(parentEventID),
-         site_type = case_when(
-           str_detect(samplingProtocol, "trap") & n_visits > 2 ~ "Monitoring sites",
-           TRUE ~ "Ad hoc sampling sites",
-         )) |>
+  mutate(
+    n_visits = n_distinct(parentEventID),
+    site_type = case_when(
+      str_detect(samplingProtocol, "trap") & n_visits > 2 ~ "Monitoring sites",
+      TRUE ~ "Ad hoc sampling sites",
+    )) |>
   group_by(datasetName, site_type, year, month) |>
   summarise(n_visits = n_distinct(locationID_site)) |>
-  mutate(yearmonth = lubridate::as_date(str_c(year,month, sep = "-"), format = "%Y-%m"))
+  mutate(
+    yearmonth = lubridate::as_date(str_c(year,month, sep = "-"),
+                                   format = "%Y-%m"))
 
+
+## Updated figure following reviewer feedback
 
 # Queensland
-fig2a <- ggplot(data = fig_2_data |>
-                  filter(datasetName == "Queensland Dung Beetle Project" &
-                           !year %in% c(2009, 2010)),
-                aes(x = yearmonth, y = n_visits, fill = site_type)) +
+fig2a <-
+  ggplot(data = fig_2_data |>
+           filter(datasetName == "Queensland Dung Beetle Project") |>
+           mutate(
+             period = if_else(
+               yearmonth %in% c(as.Date("2009-12-01"), as.Date("2010-01-01"), as.Date("2010-05-01")),
+               "2009-2010",
+               "2001-2003"
+             )) |>
+           # Add in some additional months with 0 site visits - a bit of a hack
+           # to help align x-axes across plots
+           bind_rows(
+             tibble(
+               site_type = "Ad hoc sampling sites",
+               n_visits = 0,
+               yearmonth = c(seq(as.Date("2003-07-01"), as.Date("2004-03-01"), by = "1 month"), as.Date("2009-11-01")),
+               period = c(rep("2001-2003", 9), "2009-2010")
+             )
+
+           ),
+         aes(x = yearmonth, y = n_visits, fill = site_type)) +
   geom_col() +
+
+  # Include label for 2009-2010 survey
+  geom_text(
+    data = tibble(
+      yearmonth = as.Date("2010-01-15"),
+      n_visits = 100,
+      period = "2009-2010",
+      label = "*2009-2010\nsurvey"
+    ),
+    inherit.aes = FALSE,
+    aes(x = yearmonth, y = n_visits, label = label), size = 3, family="serif"
+  ) +
   scale_fill_brewer(palette = "Paired") +
-  scale_x_date(date_breaks = "6 months", date_minor_breaks = "2 month", date_labels = "%b %Y", limits = c(as_date("2001-01-01"), as_date("2004-11-1"))) +
+  scale_x_date(date_breaks = "6 months", date_minor_breaks = "2 month", date_labels = "%b %Y") +
   xlab("Date") +
-  ylab("Number of sites visited") +
+  ylab("Total number of sites visited each month") +
   ggtitle("A. Queensland Dung Beetle Project") +
   guides(fill = guide_legend(title = "Type of site")) +
-  theme(legend.position = c(0.875, 0.764))
+  theme(legend.position = c(0.71, 0.764))+
+  facet_grid(~period, scales = "free_x", space = "free") +
+  # Format facets - note the panel.spacing was altered to help align the
+  # x-axes across plots
+  theme(strip.background = element_blank(),
+        strip.text.x = element_blank(),
+        panel.spacing = unit(0.5, "lines"))
+
 
 # SW-WA
-fig2b <- ggplot(data = fig_2_data |>
-                  filter(datasetName == "South-Western Australian Dung Beetle Survey and Monitoring Project"),
-                aes(x = yearmonth, y = n_visits, fill = site_type)) +
+fig2b <-
+  ggplot(data = fig_2_data |>
+           filter(datasetName == "South-Western Australian Dung Beetle Survey and Monitoring Project"),
+         aes(x = yearmonth, y = n_visits, fill = site_type)) +
   geom_col() +
   scale_fill_brewer(palette = "Paired") +
   scale_x_date(date_breaks = "6 months", date_minor_breaks = "2 month", date_labels = "%b %Y", limits = c(as_date("2012-01-01"), as_date("2015-11-1"))) +
   xlab("Date") +
-  ylab("Number of sites visited") +
+  ylab("Total number of sites visited each month") +
   ggtitle("B. South-Western Australian Dung Beetle Survey and Monitoring Project")
 
 # DBEE
-fig2c <- ggplot(data = fig_2_data |>
-                  filter(datasetName == "Dung Beetle Ecosystem Engineers"),
-                aes(x = yearmonth, y = n_visits, fill = site_type)) +
+fig2c <-
+  ggplot(data = fig_2_data |>
+           filter(datasetName == "Dung Beetle Ecosystem Engineers"),
+         aes(x = yearmonth, y = n_visits, fill = site_type)) +
   geom_col() +
   scale_fill_brewer(palette = "Paired") +
   scale_x_date(date_breaks = "6 months", date_minor_breaks = "2 month", date_labels = "%b %Y", limits = c(as_date("2019-01-01"), as_date("2022-11-1"))) +
   xlab("Date") +
-  ylab("Number of sites visited") +
+  ylab("Total number of sites visited each month") +
   ggtitle("C. Dung Beetle Ecosystem Engineers Project")
 
-
-
-
-fig2a / fig2b / fig2c
+fig2a / fig2b / fig2c + plot_layout(axis_titles = "collect")
 
 ggsave(
   "data-raw/data-paper/paper_figure_2.png",
@@ -576,11 +872,6 @@ ggsave(
   units = "cm",
   dpi = 600
 )
-
-# Caption info
-fig_2_data |>
-  filter(datasetName == "Queensland Dung Beetle Project" & year %in% c(2009, 2010))
-
 
 
 # Class II B.3.a ----------------------------------------------------------
@@ -604,24 +895,6 @@ qld_trap |>
   summarise(locationID_site[1],
             n_trap[1])
 # 3 sites
-(18+8+6) - 6
-
-
-# Alternative code for moving traps in qld
-dungfauna_event |>
-  filter(datasetName == "Queensland Dung Beetle Project") |>
-  group_by(locationID_site) |>
-  mutate(n = n_distinct(locationID_trap)) |>
-  filter(n > 2) |>
-  group_by(locationID_trap) |>
-  mutate(n_events = n()) |>
-  filter(n_events == 1) |>
-  ungroup() |>
-  summarise(
-    n_sites = n_distinct(locationID_site),
-    n = n()
-  )
-
 
 # georeferenceSources
 dungfauna_occurrence |>
@@ -651,7 +924,8 @@ dungfauna_occurrence |>
 
 # QLD 2009-2010 survey method summaries
 dungfauna_occurrence |>
-  filter(datasetName == "Queensland Dung Beetle Project" & year %in% c(2009, 2010)) |>
+  filter(datasetName == "Queensland Dung Beetle Project" &
+           year %in% c(2009, 2010)) |>
   distinct(samplingProtocol)
 
 
@@ -857,61 +1131,259 @@ dungfauna_occurrence |>
   summarise(n_distinct(eventID))
 
 
-
-
-
 # Table 3 -----------------------------------------------------------------
 
 # Variable names
 colnames(dungfauna_occurrence)
+str(dungfauna_occurrence)
 
+# datasetName
 dungfauna_occurrence |>
   distinct(datasetName)
 
+# basisOfRecord
 dungfauna_occurrence |>
   distinct(basisOfRecord)
 
+# catalogNumber
+dungfauna_occurrence |>
+  summarise(n_distinct(catalogNumber, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(catalogNumber)
+
+# scientificName
 dungfauna_occurrence |>
   distinct(scientificName) |>
   print(n = 23)
 
+# recordedBy
 dungfauna_occurrence |>
   distinct(recordedBy) |>
   print(n = 14)
 
+# individualCount
+dungfauna_occurrence |>
+  summarise(min(individualCount, na.rm = TRUE),
+            max(individualCount, na.rm = TRUE))
+
+# occurrenceStatus
 dungfauna_occurrence |>
   distinct(occurrenceStatus)
 
+# absence_qualifier
 dungfauna_occurrence |>
   distinct(absence_qualifier)
 
+# occurrenceRemarks
 dungfauna_occurrence |>
   distinct(occurrenceRemarks)
 
+# eventID
 dungfauna_occurrence |>
-  distinct(samplingProtocol)
+  summarise(n_distinct(eventID, na.rm = TRUE))
 
 dungfauna_occurrence |>
-  distinct(eventRemarks)
+  distinct(eventID)
 
+# parentEventID
+dungfauna_occurrence |>
+  summarise(n_distinct(parentEventID, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(parentEventID)
+
+# fieldNumber
+dungfauna_occurrence |>
+  summarise(n_distinct(fieldNumber, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(fieldNumber)
+
+# eventDate_setup
+dungfauna_occurrence |>
+  summarise(min(eventDate_setup, na.rm = TRUE),
+            max(eventDate_setup, na.rm = TRUE))
+
+# eventDate_collect
+dungfauna_occurrence |>
+  summarise(min(eventDate_collect, na.rm = TRUE),
+            max(eventDate_collect, na.rm = TRUE))
+
+# eventDate
+dungfauna_occurrence |>
+  summarise(n_distinct(eventDate, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(eventDate)
+
+# startDayOfYear
+dungfauna_occurrence |>
+  summarise(min(startDayOfYear, na.rm = TRUE),
+            max(startDayOfYear, na.rm = TRUE))
+
+# endDayOfYear
+dungfauna_occurrence |>
+  summarise(min(endDayOfYear, na.rm = TRUE),
+            max(endDayOfYear, na.rm = TRUE))
+
+# year
+dungfauna_occurrence |>
+  summarise(min(year, na.rm = TRUE),
+            max(year, na.rm = TRUE))
+
+# month
+dungfauna_occurrence |>
+  summarise(min(month, na.rm = TRUE),
+            max(month, na.rm = TRUE))
+
+# day
+dungfauna_occurrence |>
+  summarise(min(day, na.rm = TRUE),
+            max(day, na.rm = TRUE))
+
+# verbatimEventDate
+dungfauna_occurrence |>
+  summarise(n_distinct(verbatimEventDate, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(verbatimEventDate)
+
+# samplingProtocol
+dungfauna_occurrence |>
+  summarise(n_distinct(samplingProtocol, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(samplingProtocol) |>
+  arrange(samplingProtocol)
+
+# sampleSizeValue
+dungfauna_occurrence |>
+  summarise(format(min(sampleSizeValue, na.rm = TRUE), nsmall = 5),
+            format(max(sampleSizeValue, na.rm = TRUE), nsmall = 5))
+
+# sampleSizeUnit
+dungfauna_occurrence |>
+  distinct(sampleSizeUnit)
+
+# samplingEffort
+dungfauna_occurrence |>
+  summarise(n_distinct(samplingEffort, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(samplingEffort) |>
+  arrange(samplingEffort)
+
+# eventRemarks
+dungfauna_occurrence |>
+  summarise(n_distinct(eventRemarks, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(eventRemarks) |>
+  arrange(eventRemarks)
+
+# locationID_site
+dungfauna_occurrence |>
+  summarise(n_distinct(locationID_site, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(locationID_site)
+
+# locationID_trap
+dungfauna_occurrence |>
+  summarise(n_distinct(locationID_trap, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(locationID_trap)
+
+# country
+dungfauna_occurrence |>
+  distinct(country)
+
+# countryCode
+dungfauna_occurrence |>
+  distinct(countryCode)
+
+# stateProvince
+dungfauna_occurrence |>
+  distinct(stateProvince)
+
+# county
+dungfauna_occurrence |>
+  summarise(n_distinct(county, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(county)
+
+# locality
+dungfauna_occurrence |>
+  summarise(n_distinct(locality, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(locality)
+
+# decimalLatitude
+dungfauna_occurrence |>
+  summarise(format(min(decimalLatitude, na.rm = TRUE), nsmall = 7),
+            format(max(decimalLatitude, na.rm = TRUE), nsmall = 7))
+
+# decimalLongitude
+dungfauna_occurrence |>
+  summarise(format(min(decimalLongitude, na.rm = TRUE), nsmall = 7),
+            format(max(decimalLongitude, na.rm = TRUE), nsmall = 7))
+
+# geodeticDatum
 dungfauna_occurrence |>
   distinct(geodeticDatum)
 
+# coordinateUncertaintyInMeters
+dungfauna_occurrence |>
+  summarise(min(coordinateUncertaintyInMeters, na.rm = TRUE),
+            max(coordinateUncertaintyInMeters, na.rm = TRUE))
+
+# coordinatePrecision
+dungfauna_occurrence |>
+  summarise(format(min(coordinatePrecision, na.rm = TRUE), nsmall = 5),
+            format(max(coordinatePrecision, na.rm = TRUE), nsmall = 5))
+
+# verbatimLatitude
+dungfauna_occurrence |>
+  summarise(n_distinct(verbatimLatitude, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(verbatimLatitude)
+
+# verbatimLongitude
+dungfauna_occurrence |>
+  summarise(n_distinct(verbatimLongitude, na.rm = TRUE))
+
+dungfauna_occurrence |>
+  distinct(verbatimLongitude)
+
+# verbatimCoordinateSystem
 dungfauna_occurrence |>
   distinct(verbatimCoordinateSystem)
 
+# verbatimSRS
 dungfauna_occurrence |>
   distinct(verbatimSRS)
+
+# georeferenceProtocol
+dungfauna_occurrence |>
+  summarise(n_distinct(georeferenceProtocol, na.rm = TRUE))
 
 dungfauna_occurrence |>
   distinct(georeferenceProtocol)
 
+# georeferenceSources
 dungfauna_occurrence |>
   distinct(georeferenceSources)
 
+# identifiedBy
 dungfauna_occurrence |>
   distinct(identifiedBy)
 
+# dung_type
 dungfauna_occurrence |>
   distinct(dung_type)
 
@@ -932,7 +1404,7 @@ dungfauna_occurrence |>
 
 sessionInfo()
 
-# R version 4.3.1 (2023-06-16 ucrt)
+# R version 4.3.2 (2023-10-31 ucrt)
 # Platform: x86_64-w64-mingw32/x64 (64-bit)
 # Running under: Windows 11 x64 (build 22621)
 #
@@ -951,47 +1423,31 @@ sessionInfo()
 # [1] stats     graphics  grDevices utils     datasets  methods   base
 #
 # other attached packages:
-# [1] patchwork_1.1.3       ggspatial_1.1.9       plotly_4.10.2
-# [4] leaflet_2.2.0         sf_1.0-14             lubridate_1.9.2
-# [7] forcats_1.0.0         stringr_1.5.0         dplyr_1.1.2
-# [10] purrr_1.0.2           readr_2.1.4           tidyr_1.3.0
-# [13] tibble_3.2.1          ggplot2_3.4.3         tidyverse_2.0.0
-# [16] dungfaunaR_0.0.0.9000
+# [1] rgee_1.1.7            exactextractr_0.9.1   geodata_0.5-9
+# [4] terra_1.7-71          patchwork_1.2.0.9000  ggspatial_1.1.9
+# [7] leaflet_2.2.1         sf_1.0-15             lubridate_1.9.3
+# [10] forcats_1.0.0         stringr_1.5.1         dplyr_1.1.4
+# [13] purrr_1.0.2           readr_2.1.4           tidyr_1.3.1
+# [16] tibble_3.2.1          ggplot2_3.4.4         tidyverse_2.0.0
+# [19] dungfaunaR_0.0.0.9000
 #
 # loaded via a namespace (and not attached):
-# [1] DBI_1.1.3                s2_1.1.4                 remotes_2.4.2.1
-# [4] rlang_1.1.1              magrittr_2.0.3           leaflet.extras_1.0.0
-# [7] e1071_1.7-13             compiler_4.3.1           systemfonts_1.0.4
-# [10] png_0.1-8                callr_3.7.3              vctrs_0.6.3
-# [13] quadprog_1.5-8           profvis_0.3.8            wk_0.8.0
-# [16] pkgconfig_2.0.3          crayon_1.5.2             fastmap_1.1.1
-# [19] ellipsis_0.3.2           labeling_0.4.3           lwgeom_0.2-13
-# [22] leafem_0.2.0             utf8_1.2.3               promises_1.2.1
-# [25] sessioninfo_1.2.2        tzdb_0.4.0               ps_1.7.5
-# [28] ragg_1.2.5               bit_4.0.5                rnaturalearthhires_0.2.1
-# [31] cachem_1.0.8             jsonlite_1.8.7           later_1.3.1
-# [34] terra_1.7-39             parallel_4.3.1           prettyunits_1.1.1
-# [37] R6_2.5.1                 bslib_0.5.1              stringi_1.7.12
-# [40] RColorBrewer_1.1-3       pkgload_1.3.2.1          jquerylib_0.1.4
-# [43] stars_0.6-3              Rcpp_1.0.11              usethis_2.2.2
-# [46] base64enc_0.1-3          directlabels_2023.8.25   httpuv_1.6.11
-# [49] timechange_0.2.0         tidyselect_1.2.0         rnaturalearth_0.3.4
-# [52] rstudioapi_0.15.0        abind_1.4-5              ggtext_0.1.2
-# [55] codetools_0.2-19         miniUI_0.1.1.1           curl_5.0.2
-# [58] processx_3.8.2           pkgbuild_1.4.2           lattice_0.21-8
-# [61] shiny_1.7.5              withr_2.5.0              shinyalert_3.0.0
-# [64] desc_1.4.2               units_0.8-3              proxy_0.4-27
-# [67] urlchecker_1.0.1         xml2_1.3.5               pillar_1.9.0
-# [70] KernSmooth_2.23-21       shinyjs_2.1.0            generics_0.1.3
-# [73] vroom_1.6.3              rprojroot_2.0.3          sp_2.0-0
-# [76] hms_1.1.3                munsell_0.5.0            scales_1.2.1
-# [79] xtable_1.8-4             class_7.3-22             glue_1.6.2
-# [82] lazyeval_0.2.2           tools_4.3.1              data.table_1.14.8
-# [85] fs_1.6.3                 grid_4.3.1               crosstalk_1.2.0
-# [88] devtools_2.4.5           colorspace_2.1-0         raster_3.6-23
-# [91] cli_3.6.1                textshaping_0.3.6        fansi_1.0.4
-# [94] viridisLite_0.4.2        gtable_0.3.4             sass_0.4.7
-# [97] digest_0.6.33            classInt_0.4-9           farver_2.1.1
-# [100] htmlwidgets_1.6.2        memoise_2.0.1            htmltools_0.5.6
-# [103] lifecycle_1.0.3          httr_1.4.7               shinyWidgets_0.8.0
-# [106] mime_0.12                bit64_4.0.5              gridtext_0.1.5
+# [1] gtable_0.3.4             raster_3.6-26            htmlwidgets_1.6.4
+# [4] processx_3.8.2           lattice_0.22-5           tzdb_0.4.0
+# [7] vctrs_0.6.5              tools_4.3.2              crosstalk_1.2.1
+# [10] ps_1.7.5                 generics_0.1.3           proxy_0.4-27
+# [13] fansi_1.0.6              pkgconfig_2.0.3          Matrix_1.6-5
+# [16] KernSmooth_2.23-22       RColorBrewer_1.1-3       lifecycle_1.0.4
+# [19] farver_2.1.1             compiler_4.3.2           munsell_0.5.0
+# [22] codetools_0.2-19         htmltools_0.5.7          class_7.3-22
+# [25] pillar_1.9.0             crayon_1.5.2             classInt_0.4-10
+# [28] tidyselect_1.2.0         digest_0.6.34            stringi_1.8.3
+# [31] labeling_0.4.3           fastmap_1.1.1            rnaturalearth_0.3.4
+# [34] grid_4.3.2               colorspace_2.1-0         cli_3.6.2
+# [37] magrittr_2.0.3           utf8_1.2.4               e1071_1.7-14
+# [40] withr_3.0.0              scales_1.3.0             sp_2.1-3
+# [43] timechange_0.3.0         httr_1.4.7               reticulate_1.32.0
+# [46] rnaturalearthhires_0.2.1 png_0.1-8                hms_1.1.3
+# [49] viridisLite_0.4.2        rlang_1.1.3              Rcpp_1.0.12
+# [52] glue_1.7.0               DBI_1.2.1                rstudioapi_0.15.0
+# [55] jsonlite_1.8.8           R6_2.5.1                 units_0.8-5
