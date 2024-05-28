@@ -10,7 +10,7 @@ deliberately introduced dung beetles in Australia. Currently, the data
 contain 1,752,807 species identifications from 22,718 occurrence
 records, taken from 10,272 sampling events at 546 locations. The data
 also contain 213,538 absence records. The data are explained in detail
-in Berson et al (submitted).
+in Berson et al (2024).
 
 Code used to format the data can be found in the `data-raw folder`. Note
 that we formatted and performed checks on data from different projects
@@ -19,8 +19,8 @@ separately (see `data-raw/qld_2001_2010.R`,
 combining these data into one dataset (see `data-raw/dungfauna_aus.R`).
 
 Code used to generate the summary statistics, figures and tables in
-Berson et al (submitted) can by found in the `data-paper` folder within
-the `data-raw` folder.
+Berson et al (2024) can by found in the `data-paper` folder within the
+`data-raw` folder.
 
 The data are provided in both wide (`dungfauna_event`) and long
 (`dungfauna_occurrence`) format. Running `dungfaunaR::runShinyApp()`
@@ -28,8 +28,7 @@ will launch a shiny app for visually exploring the data.
 
 ## Installation
 
-You can install the development version of dungfaunaR from
-[GitHub](https://github.com/) with:
+You can install dungfaunaR from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -56,9 +55,15 @@ the built-in shiny app using `dungfaunaR::runShinyApp()`
 
 ## Citation
 
-The paper detailing the data is currently submitted as a data paper.
-Please check back here for the correct citation to use when using the
-data.
+Berson, Jacob D., Penelope B. Edwards, T. James Ridsdill-Smith,
+Christopher K. Taylor, Daniel J. Anderson, Nigel R. Andrew, Russell A.
+Barrow, David A. Cousins, Robert N. Emery, Laura L. Fagan, Rhiannon M.
+Foster, Lucas G. Harwood, Zac Hemmings, Megan J. Lewis, Sherralee S.
+Lukehurst, Jake Manger, John N. Matthiessen, Marcela D. C. Vieira, Paul
+A. Weston, Raphael K. Didham and Theodore A. Evans. 2024. “Deliberately
+Introduced Dung Beetles in Australia: 12 years of Occurrence and
+Abundance Records from 2001 to 2022.” Ecology e4328. <https://>
+doi.org/10.1002/ecy.4328
 
 ## Issues
 
